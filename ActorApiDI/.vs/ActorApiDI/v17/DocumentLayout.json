@@ -1,0 +1,290 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1D42C063-08B5-4BE7-AB57-05A24EDE01C0}|..\\UnitTest\\UnitTest.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\unittest\\actorservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\services\\idataactorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:services\\idataactorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\clients\\catfactsdataactorclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:clients\\catfactsdataactorclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\clients\\coindeskdataactorclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:clients\\coindeskdataactorclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\clients\\newsdataactorclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:clients\\newsdataactorclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\clients\\spotifydataactorclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:clients\\spotifydataactorclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\clients\\weatherdataactorclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:clients\\weatherdataactorclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\controllers\\actorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:controllers\\actorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\services\\dataactorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:services\\dataactorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\domains\\spotifyauthresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:domains\\spotifyauthresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\domains\\openweatherresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:domains\\openweatherresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\domains\\dataactorresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:domains\\dataactorresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\domains\\dataactorrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:domains\\dataactorrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|c:\\users\\andreas pattakos\\documents\\git projects\\.net-playground\\agileactors test project\\actorapidi\\clients\\idataactorclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3D77F97-1AE8-4D0C-A14C-ADAB1E86B9CF}|ActorApiDI.csproj|solutionrelative:clients\\idataactorclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 220,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "OpenWeatherResponse.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Domains\\OpenWeatherResponse.cs",
+              "RelativeDocumentMoniker": "Domains\\OpenWeatherResponse.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Domains\\OpenWeatherResponse.cs",
+              "RelativeToolTip": "Domains\\OpenWeatherResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T20:03:03.215Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ActorServiceTests.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\UnitTest\\ActorServiceTests.cs",
+              "RelativeDocumentMoniker": "..\\UnitTest\\ActorServiceTests.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\UnitTest\\ActorServiceTests.cs",
+              "RelativeToolTip": "..\\UnitTest\\ActorServiceTests.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAQwCEAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T12:51:06.324Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "SpotifyAuthResponse.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Domains\\SpotifyAuthResponse.cs",
+              "RelativeDocumentMoniker": "Domains\\SpotifyAuthResponse.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Domains\\SpotifyAuthResponse.cs",
+              "RelativeToolTip": "Domains\\SpotifyAuthResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T12:15:27.967Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CoinDeskDataActorClient.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Clients\\CoinDeskDataActorClient.cs",
+              "RelativeDocumentMoniker": "Clients\\CoinDeskDataActorClient.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Clients\\CoinDeskDataActorClient.cs",
+              "RelativeToolTip": "Clients\\CoinDeskDataActorClient.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T10:56:14.218Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "DataActorRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Domains\\DataActorRequest.cs",
+              "RelativeDocumentMoniker": "Domains\\DataActorRequest.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Domains\\DataActorRequest.cs",
+              "RelativeToolTip": "Domains\\DataActorRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-03T12:28:44.732Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "DataActorResponse.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Domains\\DataActorResponse.cs",
+              "RelativeDocumentMoniker": "Domains\\DataActorResponse.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Domains\\DataActorResponse.cs",
+              "RelativeToolTip": "Domains\\DataActorResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-03T12:09:14.445Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "appsettings.Development.json",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\appsettings.Development.json",
+              "RelativeToolTip": "appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-11-03T12:00:08.66Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwDYAAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-03T11:29:10.365Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CatFactsDataActorClient.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Clients\\CatFactsDataActorClient.cs",
+              "RelativeDocumentMoniker": "Clients\\CatFactsDataActorClient.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Clients\\CatFactsDataActorClient.cs",
+              "RelativeToolTip": "Clients\\CatFactsDataActorClient.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-03T11:23:13.765Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "NewsDataActorClient.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Clients\\NewsDataActorClient.cs",
+              "RelativeDocumentMoniker": "Clients\\NewsDataActorClient.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Clients\\NewsDataActorClient.cs",
+              "RelativeToolTip": "Clients\\NewsDataActorClient.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-03T11:22:44.773Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "SpotifyDataActorClient.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Clients\\SpotifyDataActorClient.cs",
+              "RelativeDocumentMoniker": "Clients\\SpotifyDataActorClient.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Clients\\SpotifyDataActorClient.cs",
+              "RelativeToolTip": "Clients\\SpotifyDataActorClient.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAADIAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-03T11:21:56.884Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "WeatherDataActorClient.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Clients\\WeatherDataActorClient.cs",
+              "RelativeDocumentMoniker": "Clients\\WeatherDataActorClient.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Clients\\WeatherDataActorClient.cs",
+              "RelativeToolTip": "Clients\\WeatherDataActorClient.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAUwBAAAABXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-03T11:21:19.555Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "IDataActorClient.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Clients\\IDataActorClient.cs",
+              "RelativeDocumentMoniker": "Clients\\IDataActorClient.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Clients\\IDataActorClient.cs",
+              "RelativeToolTip": "Clients\\IDataActorClient.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-03T11:20:38.141Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IDataActorService.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Services\\IDataActorService.cs",
+              "RelativeDocumentMoniker": "Services\\IDataActorService.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Services\\IDataActorService.cs",
+              "RelativeToolTip": "Services\\IDataActorService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-03T11:19:09.401Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "DataActorService.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Services\\DataActorService.cs",
+              "RelativeDocumentMoniker": "Services\\DataActorService.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Services\\DataActorService.cs",
+              "RelativeToolTip": "Services\\DataActorService.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABoAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-03T11:18:47.356Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ActorController.cs",
+              "DocumentMoniker": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Controllers\\ActorController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ActorController.cs",
+              "ToolTip": "C:\\Users\\Andreas Pattakos\\Documents\\Git Projects\\.NET-Playground\\AgileActors Test Project\\ActorApiDI\\Controllers\\ActorController.cs",
+              "RelativeToolTip": "Controllers\\ActorController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-03T11:18:03.121Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
