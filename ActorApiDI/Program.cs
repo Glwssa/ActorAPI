@@ -52,6 +52,8 @@ namespace ActorApiDI
                 builder.Services.AddKeyedScoped<IDataActorClient, NewsDataActorClient>("News");
                 builder.Services.AddKeyedScoped<IDataActorClient, SpotifyDataActorClient>("Spotify");
                 builder.Services.AddKeyedScoped<IDataActorClient, CoinDeskDataActorClient>("CoinDesk");
+                //Add Memory caching 
+                builder.Services.AddMemoryCache();
                 //Add Controllers with correct display names for Enums
                 builder.Services.AddControllers()
                     .AddJsonOptions(options =>
