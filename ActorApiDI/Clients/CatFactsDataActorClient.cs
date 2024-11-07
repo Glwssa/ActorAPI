@@ -16,6 +16,7 @@ namespace ActorApiDI.Clients
         /// <exception cref="HttpIOException"></exception>
         public async Task<DataActorResponse> GetData(DataActorRequest request)
         {
+            //Caching check
             if (_memoryCache.TryGetValue($"CatFacts {DateTime.Now.ToString("yyyyy-MM-dd")}", out DataActorResponse result) && result is not null)
             {
                 return result;
