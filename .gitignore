@@ -7,7 +7,7 @@
 # Extra 
 /ActorApiDI/.vs/
 /ActorApiDI/.obj/
-/ActorApiDI/bin/Debug/net8.0/
+/ActorApiDI/bin/
 /UnitTest/bin/
 /UnitTest/obj/
 
