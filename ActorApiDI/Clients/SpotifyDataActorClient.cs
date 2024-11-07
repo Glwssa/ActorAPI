@@ -1,5 +1,6 @@
 ﻿
 using ActorApiDI.Domains;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http.Headers;
@@ -7,7 +8,7 @@ using System.Net.Http.Headers;
 namespace ActorApiDI.Clients
 {
 
-    public class SpotifyDataActorClient(IHttpClientFactory _httpClientFactory) : IDataActorClient
+    public class SpotifyDataActorClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IDataActorClient
     {
         /// <summary>
         /// Retrives information about the requested artist 
@@ -33,10 +34,16 @@ namespace ActorApiDI.Clients
                 throw new HttpIOException(HttpRequestError.UserAuthenticationError, "Error: Spotify Authentication Service was not successfull, please check your cridentials.");
             var authStringResult = await Authresponse.Content.ReadAsStringAsync();
             var auth = JsonConvert.DeserializeObject<SpotifyAuthResponse>(authStringResult);
-            
+
+            //Caching check
+            string url = $"/v1/artists/{request.Param1}";
+            if (_memoryCache.TryGetValue($"Spotify {url}", out DataActorResponse result) && result is not null)
+            {
+                return result;
+            }
+
             //Request
             var client = _httpClientFactory.CreateClient("SpotifyClient");
-            string url = $"/v1/artists/{request.Param1}";
             var Request = new HttpRequestMessage(new HttpMethod("GET"), url);
             Request.Headers.TryAddWithoutValidation("Authorization", $"{auth!.token_type}  {auth!.access_token}");
 
@@ -45,14 +52,17 @@ namespace ActorApiDI.Clients
             if (!response.IsSuccessStatusCode)
                 throw new HttpIOException(HttpRequestError.ConnectionError, "Error: Spotify Service was not available.");
             var stringResult = await response.Content.ReadAsStringAsync();
-            //return retrived data in generic format
-            return new DataActorResponse()
+            //return retrived data in generic format and cache it
+            var cachedResult =  new DataActorResponse()
             {
                 ApiName = "Spotify",
                 Url = client.BaseAddress + url,
                 Body = stringResult
 
             };
+            _memoryCache.Set($"Spotify {url}", cachedResult);
+
+            return cachedResult;
 
         }
     }
