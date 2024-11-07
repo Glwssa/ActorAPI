@@ -27,6 +27,7 @@ List of Clients:
       Retrives random cat facts
     Data Required for Request:
       None
+
 NOTE: Example Params and Headers for each Client are located in appsetting.Development.json
 
 List of To-Do Clients:
