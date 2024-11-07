@@ -1,11 +1,12 @@
 ﻿
 using ActorApiDI.Domains;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System.Net.Http;
 
 namespace ActorApiDI.Clients
 {
-    public class CatFactsDataActorClient(IHttpClientFactory _httpClientFactory) : IDataActorClient
+    public class CatFactsDataActorClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IDataActorClient
     {
         /// <summary>
         /// Retrives random cat facts
@@ -15,6 +16,11 @@ namespace ActorApiDI.Clients
         /// <exception cref="HttpIOException"></exception>
         public async Task<DataActorResponse> GetData(DataActorRequest request)
         {
+            if (_memoryCache.TryGetValue($"CatFacts {DateTime.Now.ToString("yyyyy-MM-dd")}", out DataActorResponse result) && result is not null)
+            {
+                return result;
+            }
+
             //Setup HttpRequest
             var client = _httpClientFactory.CreateClient("CatFacts");
             string url = $"/fact";
@@ -25,14 +31,16 @@ namespace ActorApiDI.Clients
 
             var stringResult = await response.Content.ReadAsStringAsync();
 
-            //return retrived data in generic format
-            return new DataActorResponse()
+            //return retrived data in generic format and add it to the cache
+            var cachedResult = new DataActorResponse()
             {
-                ApiName = "CoinDesk",
+                ApiName = "CatFacts",
                 Url = client.BaseAddress + url,
                 Body = stringResult
 
             };
+            _memoryCache.Set($"CatFacts {DateTime.Now.ToString("yyyyy-MM-dd")}", cachedResult);
+            return cachedResult;
         }
     }
 }
