@@ -37,7 +37,7 @@ namespace ActorApiDI.Clients
 
             //Caching check
             string url = $"/v1/artists/{request.Param1}";
-            if (_memoryCache.TryGetValue($"Spotify {url}", out DataActorResponse result) && result is not null)
+            if (_memoryCache.TryGetValue($"Spotify {url}", out DataActorResponse? result) && result is not null)
             {
                 return result;
             }

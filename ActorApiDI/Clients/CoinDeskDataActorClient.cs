@@ -16,7 +16,7 @@ namespace ActorApiDI.Clients
         public async Task<DataActorResponse> GetData(DataActorRequest request)
         {
             //Check if cache has this entry and return it
-            if (_memoryCache.TryGetValue($"CoinDesk {DateTime.Now.ToString("yyyyy-MM-dd")}", out DataActorResponse result) && result is not null)
+            if (_memoryCache.TryGetValue($"CoinDesk {DateTime.Now.ToString("yyyyy-MM-dd")}", out DataActorResponse? result) && result is not null)
             {
                 return result;
             }

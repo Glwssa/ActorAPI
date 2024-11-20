@@ -26,7 +26,7 @@ namespace ActorApiDI.Clients
                 throw new BadHttpRequestException("Error: Please provide all the required fields. (Param1/Header1)", 400);
             //caching check
             string url = $"/data/2.5/weather?q={request.Param1}&appid={request.Header1}&units=metric";
-            if (_memoryCache.TryGetValue($"OpenWeather {url}", out DataActorResponse result) && result is not null)
+            if (_memoryCache.TryGetValue($"OpenWeather {url}", out DataActorResponse? result) && result is not null)
             {
                 return result;
             }

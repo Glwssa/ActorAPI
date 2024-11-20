@@ -23,7 +23,7 @@ namespace ActorApiDI.Clients
             DateTime dateToday = DateTime.Now;
             string url = $"/v2/everything?q={request.Param1}&from={dateToday.ToString("yyyy-MM-dd")}&sortBy=publishedAt&apiKey={request.Header1}";
             //caching check
-            if (_memoryCache.TryGetValue($"News {url}", out DataActorResponse result) && result is not null)
+            if (_memoryCache.TryGetValue($"News {url}", out DataActorResponse? result) && result is not null)
             {
                 return result;
             }
