@@ -14,7 +14,7 @@ public sealed class ActorServiceTests
         // Arrange
         var request = new DataActorRequest
         {
-            clientSelection = ClientSelection.CatFacts
+            ClientSelection = ClientSelection.CatFacts
         };
 
         var expectedResponse = new DataActorResponse

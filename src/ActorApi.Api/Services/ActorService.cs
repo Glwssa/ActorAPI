@@ -20,7 +20,7 @@ namespace ActorApi.Api.Services
         }
         public Task<DataActorResponse> GetDataAsync(DataActorRequest request)
         {
-            var client = _clientResolver.Resolve(request.clientSelection);
+            var client = _clientResolver.Resolve(request.ClientSelection);
 
             return client.GetDataAsync(request);
         }

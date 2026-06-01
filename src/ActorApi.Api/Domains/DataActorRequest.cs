@@ -7,7 +7,7 @@ namespace ActorApi.Api.Domains
     /// </summary>
     public class DataActorRequest
     {
-        public required ClientSelection clientSelection {  get; init; }
+        public required ClientSelection ClientSelection {  get; init; }
         public string? Param1 { get; set; }
         public string? Param2 { get; set; }
         public string? Header1 { get; set; }
