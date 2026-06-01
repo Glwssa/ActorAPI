@@ -1,13 +1,15 @@
 ﻿using ActorApi.Api.Domains;
 using Microsoft.Extensions.Caching.Memory;
-using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace ActorApi.Api.Clients
 {
 
     public class SpotifyProviderClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IActorProviderClient
     {
+        public ClientSelection ClientSelection => ClientSelection.Spotify;
+
         /// <summary>
         /// Retrives information about the requested artist 
         /// </summary>
@@ -15,7 +17,7 @@ namespace ActorApi.Api.Clients
         /// <returns></returns>
         /// <exception cref="BadHttpRequestException"></exception>
         /// <exception cref="HttpIOException"></exception>
-        public async Task<DataActorResponse> GetData(DataActorRequest request)
+        public async Task<DataActorResponse> GetDataAsync(DataActorRequest request)
         {
             //Valid fields check
             if (request.Param1 is null || request.Header1 is null || request.Header2 is null)
@@ -51,7 +53,7 @@ namespace ActorApi.Api.Clients
                 throw new HttpIOException(HttpRequestError.ConnectionError, "Error: Spotify Service was not available.");
             var stringResult = await response.Content.ReadAsStringAsync();
             //return retrived data in generic format and cache it
-            var cachedResult =  new DataActorResponse()
+            var cachedResult = new DataActorResponse()
             {
                 ApiName = "Spotify",
                 Url = client.BaseAddress + url,
@@ -61,7 +63,6 @@ namespace ActorApi.Api.Clients
             _memoryCache.Set($"Spotify {url}", cachedResult);
 
             return cachedResult;
-
         }
     }
 }

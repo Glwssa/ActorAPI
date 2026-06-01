@@ -5,6 +5,8 @@ namespace ActorApi.Api.Clients
 {
     public class OpenWeatherProviderClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IActorProviderClient
     {
+        public ClientSelection ClientSelection => ClientSelection.OpenWeather;
+
         /// <summary>
         /// Retrives weather data for the requested city.
         /// </summary>
@@ -12,7 +14,7 @@ namespace ActorApi.Api.Clients
         /// <returns></returns>
         /// <exception cref="BadHttpRequestException"></exception>
         /// <exception cref="HttpIOException"></exception>
-        public async Task<DataActorResponse> GetData(DataActorRequest request)
+        public async Task<DataActorResponse> GetDataAsync(DataActorRequest request)
         {
             //Valid fields check
             if (request.Param1 is null || request.Header1 is null)
@@ -34,7 +36,7 @@ namespace ActorApi.Api.Clients
             var stringResult = await response.Content.ReadAsStringAsync();
 
             //return retrived data in generic format and cache it
-            var cachedResult =  new DataActorResponse()
+            var cachedResult = new DataActorResponse()
             {
                 ApiName = "OpenWeather",
                 Url = client.BaseAddress + url,

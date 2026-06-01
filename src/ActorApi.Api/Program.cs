@@ -1,6 +1,6 @@
-
 using ActorApi.Api.Clients;
 using ActorApi.Api.Services;
+using ActorApi.Api.Services.Resolvers;
 using System.Text.Json.Serialization;
 
 namespace ActorApi.Api
@@ -46,12 +46,14 @@ namespace ActorApi.Api
                     });
                 //Setup Actor Service (for every request a new ActorService is created)
                 builder.Services.AddScoped<IActorService, ActorService>();
+                builder.Services.AddScoped<IActorProviderClientResolver, ActorProviderClientResolver>();
                 //Setup Actor Clients with Keys for easy search from Actorservice (for every request a new ActorClient is created)
-                builder.Services.AddKeyedScoped<IActorProviderClient, CatFactsProviderClient>("CatFacts");
-                builder.Services.AddKeyedScoped<IActorProviderClient, OpenWeatherProviderClient>("Weather");
-                builder.Services.AddKeyedScoped<IActorProviderClient, NewsProviderClient>("News");
-                builder.Services.AddKeyedScoped<IActorProviderClient, SpotifyProviderClient>("Spotify");
-                builder.Services.AddKeyedScoped<IActorProviderClient, CoinDeskProviderClient>("CoinDesk");
+                builder.Services.AddScoped<IActorProviderClient, OpenWeatherProviderClient>();
+                builder.Services.AddScoped<IActorProviderClient, CatFactsProviderClient>();
+                builder.Services.AddScoped<IActorProviderClient, NewsProviderClient>();
+                builder.Services.AddScoped<IActorProviderClient, SpotifyProviderClient>();
+                builder.Services.AddScoped<IActorProviderClient, CoinDeskProviderClient>();
+
                 //Add Memory caching 
                 builder.Services.AddMemoryCache();
                 //Add Controllers with correct display names for Enums

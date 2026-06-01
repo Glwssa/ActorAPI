@@ -5,13 +5,15 @@ namespace ActorApi.Api.Clients
 {
     public class CoinDeskProviderClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IActorProviderClient
     {
+        public ClientSelection ClientSelection => ClientSelection.CoinDesk;
+
         /// <summary>
         /// Retrives the Bitcoin Price Index (BPI) in real-time
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         /// <exception cref="HttpIOException"></exception>
-        public async Task<DataActorResponse> GetData(DataActorRequest request)
+        public async Task<DataActorResponse> GetDataAsync(DataActorRequest request)
         {
             //Check if cache has this entry and return it
             if (_memoryCache.TryGetValue($"CoinDesk {DateTime.Now.ToString("yyyyy-MM-dd")}", out DataActorResponse? result) && result is not null)
@@ -24,7 +26,7 @@ namespace ActorApi.Api.Clients
             string url = $"/v1/bpi/currentprice.json";
             var response = await client.GetAsync(url);
             //Success response check
-            if (!response.IsSuccessStatusCode) 
+            if (!response.IsSuccessStatusCode)
                 throw new HttpIOException(HttpRequestError.ConnectionError, "Error: CoinDesk Service was not available.");
 
             var stringResult = await response.Content.ReadAsStringAsync();

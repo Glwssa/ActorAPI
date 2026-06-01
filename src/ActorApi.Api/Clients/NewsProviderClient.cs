@@ -5,6 +5,8 @@ namespace ActorApi.Api.Clients
 {
     public class NewsProviderClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IActorProviderClient
     {
+        public ClientSelection ClientSelection => ClientSelection.News;
+
         /// <summary>
         /// Retrives News data from a specific keyword that was published today.
         /// </summary>
@@ -12,7 +14,7 @@ namespace ActorApi.Api.Clients
         /// <returns></returns>
         /// <exception cref="BadHttpRequestException"></exception>
         /// <exception cref="HttpIOException"></exception>
-        public async Task<DataActorResponse> GetData(DataActorRequest request)
+        public async Task<DataActorResponse> GetDataAsync(DataActorRequest request)
         {
             //Valid fields check
             if (request.Param1 is null || request.Header1 is null)

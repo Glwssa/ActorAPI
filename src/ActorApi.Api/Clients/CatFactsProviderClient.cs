@@ -5,13 +5,15 @@ namespace ActorApi.Api.Clients
 {
     public class CatFactsProviderClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IActorProviderClient
     {
+        public ClientSelection ClientSelection => ClientSelection.CatFacts;
+
         /// <summary>
         /// Retrives random cat facts
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         /// <exception cref="HttpIOException"></exception>
-        public async Task<DataActorResponse> GetData(DataActorRequest request)
+        public async Task<DataActorResponse> GetDataAsync(DataActorRequest request)
         {
             //Caching check
             if (_memoryCache.TryGetValue($"CatFacts {DateTime.Now.ToString("yyyyy-MM-dd")}", out DataActorResponse? result) && result is not null)
