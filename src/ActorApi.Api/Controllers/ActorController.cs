@@ -1,4 +1,4 @@
-﻿using ActorApi.Api.Domains;
+﻿using ActorApi.Api.Contracts;
 using ActorApi.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 

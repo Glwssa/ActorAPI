@@ -1,4 +1,4 @@
-﻿namespace ActorApi.Api.Domains
+﻿namespace ActorApi.Api.Contracts
 {
     /// <summary>
     /// Generic Data Response Model

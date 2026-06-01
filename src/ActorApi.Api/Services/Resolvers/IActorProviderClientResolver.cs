@@ -1,5 +1,5 @@
 ﻿using ActorApi.Api.Clients;
-using ActorApi.Api.Domains;
+using ActorApi.Api.Contracts;
 
 namespace ActorApi.Api.Services.Resolvers
 {

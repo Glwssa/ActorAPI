@@ -1,5 +1,5 @@
 ﻿using ActorApi.Api.Clients;
-using ActorApi.Api.Domains;
+using ActorApi.Api.Contracts;
 using ActorApi.Api.Services.Resolvers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;

@@ -1,4 +1,5 @@
-﻿using ActorApi.Api.Domains;
+﻿using ActorApi.Api.Contracts;
+using ActorApi.Api.Domains;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
