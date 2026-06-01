@@ -1,4 +1,5 @@
 ﻿using ActorApi.Api.Contracts;
+using ActorApi.Api.Domains;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace ActorApi.Api.Clients

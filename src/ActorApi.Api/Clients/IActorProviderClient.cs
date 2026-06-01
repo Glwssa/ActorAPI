@@ -1,4 +1,5 @@
 ﻿using ActorApi.Api.Contracts;
+using ActorApi.Api.Domains;
 
 namespace ActorApi.Api.Clients
 {
