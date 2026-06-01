@@ -16,7 +16,8 @@ namespace ActorApi.Api.Services
         [FromKeyedServices("CatFacts")] IDataActorClient _CatFactsDataActorClient,
         [FromKeyedServices("News")] IDataActorClient _NewsDataActorClient,
         [FromKeyedServices("Spotify")] IDataActorClient _SpotifyDataActorClient,
-        [FromKeyedServices("CoinDesk")] IDataActorClient _CoinDeskDataActorClient) : IDataActorService
+        [FromKeyedServices("CoinDesk")] IDataActorClient _CoinDeskDataActorClient,
+        IConfiguration _configuration) : IDataActorService
     {
         public Task<DataActorResponse> GetData(DataActorRequest request)
         {
@@ -30,6 +31,15 @@ namespace ActorApi.Api.Services
                     case ClientSelection.CatFacts:
                         return _CatFactsDataActorClient.GetData(request);
                     case ClientSelection.Spotify:
+                        var spotifyEnabled = _configuration.GetValue<bool>("Providers:Spotify:Enabled");
+
+                        if (!spotifyEnabled)
+                        {
+                            throw new BadHttpRequestException(
+                                "Spotify provider is currently disabled because it requires authentication refactoring.",
+                                400);
+                        }
+
                         return _SpotifyDataActorClient.GetData(request);
                     case ClientSelection.News:
                         return _NewsDataActorClient.GetData(request);
