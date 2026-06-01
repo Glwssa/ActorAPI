@@ -3,7 +3,7 @@ using ActorApi.Api.Clients;
 using ActorApi.Api.Services;
 using System.Text.Json.Serialization;
 
-namespace ActorApiDI
+namespace ActorApi.Api
 {
     public class Program
     {
