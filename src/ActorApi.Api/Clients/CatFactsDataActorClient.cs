@@ -1,10 +1,7 @@
-﻿
-using ActorApiDI.Domains;
-using Microsoft.AspNetCore.Mvc;
+﻿using ActorApi.Api.Domains;
 using Microsoft.Extensions.Caching.Memory;
-using System.Net.Http;
 
-namespace ActorApiDI.Clients
+namespace ActorApi.Api.Clients
 {
     public class CatFactsDataActorClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IDataActorClient
     {

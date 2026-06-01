@@ -1,9 +1,9 @@
-﻿using ActorApiDI.Domains;
+﻿using ActorApi.Api.Domains;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ActorApiDI.Services
+namespace ActorApi.Api.Clients
 {
-    public interface IDataActorService
+    public interface IDataActorClient
     {
         Task<DataActorResponse> GetData(DataActorRequest request);
     }

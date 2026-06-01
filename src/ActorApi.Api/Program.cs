@@ -1,6 +1,6 @@
 
-using ActorApiDI.Clients;
-using ActorApiDI.Services;
+using ActorApi.Api.Clients;
+using ActorApi.Api.Services;
 using System.Text.Json.Serialization;
 
 namespace ActorApiDI

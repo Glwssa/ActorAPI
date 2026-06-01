@@ -1,8 +1,8 @@
-﻿using ActorApiDI.Domains;
-using ActorApiDI.Services;
+﻿using ActorApi.Api.Domains;
+using ActorApi.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ActorApiDI.Controllers
+namespace ActorApi.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]

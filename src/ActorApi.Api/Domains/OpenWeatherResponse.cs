@@ -1,4 +1,4 @@
-﻿namespace ActorApiDI.Domains
+﻿namespace ActorApi.Api.Domains
 {
     /// <summary>
     /// OpenWeather Response Models (not in use)

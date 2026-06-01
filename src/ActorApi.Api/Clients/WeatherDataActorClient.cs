@@ -1,14 +1,7 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
-using ActorApiDI.Domains;
+﻿using ActorApi.Api.Domains;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace ActorApiDI.Clients
+namespace ActorApi.Api.Clients
 {
     public class WeatherDataActorClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IDataActorClient
     {

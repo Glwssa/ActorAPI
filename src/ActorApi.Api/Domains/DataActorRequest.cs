@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ActorApiDI.Domains
+namespace ActorApi.Api.Domains
 {
     /// <summary>
     /// Data Request Model

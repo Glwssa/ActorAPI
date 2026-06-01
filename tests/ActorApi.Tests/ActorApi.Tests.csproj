@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ActorApiDI\ActorApiDI.csproj" />
+    <ProjectReference Include="..\..\src\ActorApi.Api\ActorApi.Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>

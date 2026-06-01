@@ -1,10 +1,10 @@
-using ActorApiDI.Clients;
-using ActorApiDI.Controllers;
-using ActorApiDI.Domains;
-using ActorApiDI.Services;
+using ActorApi.Api.Clients;
+using ActorApi.Api.Controllers;
+using ActorApi.Api.Domains;
+using ActorApi.Api.Services;
 using Moq;
 
-namespace UnitTest
+namespace ActorApi.Tests
 {
     /// <summary>
     /// This XUnit test is not working correctly for now 

@@ -1,9 +1,7 @@
-﻿
-using ActorApiDI.Clients;
-using ActorApiDI.Domains;
-using Microsoft.AspNetCore.Mvc;
+﻿using ActorApi.Api.Clients;
+using ActorApi.Api.Domains;
 
-namespace ActorApiDI.Services
+namespace ActorApi.Api.Services
 {
     /// <summary>
     /// Data Actor Service that manages all the Client requests

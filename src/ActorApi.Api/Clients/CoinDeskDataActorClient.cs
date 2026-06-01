@@ -1,9 +1,7 @@
-﻿using ActorApiDI.Domains;
+﻿using ActorApi.Api.Domains;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Net.Http;
 
-namespace ActorApiDI.Clients
+namespace ActorApi.Api.Clients
 {
     public class CoinDeskDataActorClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IDataActorClient
     {

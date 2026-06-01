@@ -1,11 +1,9 @@
-﻿
-using ActorApiDI.Domains;
+﻿using ActorApi.Api.Domains;
 using Microsoft.Extensions.Caching.Memory;
-using Newtonsoft.Json;
-using System;
 using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
-namespace ActorApiDI.Clients
+namespace ActorApi.Api.Clients
 {
 
     public class SpotifyDataActorClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IDataActorClient
