@@ -1,5 +1,6 @@
 ﻿using ActorApi.Api.Contracts;
 using ActorApi.Api.Domains;
+using ActorApi.Api.Extensions;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace ActorApi.Api.Clients
@@ -18,10 +19,12 @@ namespace ActorApi.Api.Clients
         public async Task<DataActorResponse> GetDataAsync(DataActorRequest request)
         {
             //Valid fields check
-            if (request.Param1 is null || request.Header1 is null)
+            var city = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.City);
+            var apiKey = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ApiKey);
+            if (city is null || apiKey is null)
                 throw new BadHttpRequestException("Error: Please provide all the required fields. (Param1/Header1)", 400);
             //caching check
-            string url = $"/data/2.5/weather?q={request.Param1}&appid={request.Header1}&units=metric";
+            string url = $"/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
             if (_memoryCache.TryGetValue($"OpenWeather {url}", out DataActorResponse? result) && result is not null)
             {
                 return result;

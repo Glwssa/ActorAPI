@@ -1,5 +1,6 @@
 ﻿using ActorApi.Api.Contracts;
 using ActorApi.Api.Domains;
+using ActorApi.Api.Extensions;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace ActorApi.Api.Clients
@@ -18,10 +19,12 @@ namespace ActorApi.Api.Clients
         public async Task<DataActorResponse> GetDataAsync(DataActorRequest request)
         {
             //Valid fields check
-            if (request.Param1 is null || request.Header1 is null)
+            var article = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.Article);
+            var key = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ApiKey);
+            if (article is null || key is null)
                 throw new BadHttpRequestException("Error: Please provide all the required fields. (Param1/Header1)", 400);
             DateTime dateToday = DateTime.Now;
-            string url = $"/v2/everything?q={request.Param1}&from={dateToday.ToString("yyyy-MM-dd")}&sortBy=publishedAt&apiKey={request.Header1}";
+            string url = $"/v2/everything?q={article}&from={dateToday.ToString("yyyy-MM-dd")}&sortBy=publishedAt&apiKey={key}";
             //caching check
             if (_memoryCache.TryGetValue($"News {url}", out DataActorResponse? result) && result is not null)
             {

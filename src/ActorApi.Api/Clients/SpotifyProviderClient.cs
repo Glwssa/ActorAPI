@@ -1,5 +1,6 @@
 ﻿using ActorApi.Api.Contracts;
 using ActorApi.Api.Domains;
+using ActorApi.Api.Extensions;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -21,12 +22,15 @@ namespace ActorApi.Api.Clients
         public async Task<DataActorResponse> GetDataAsync(DataActorRequest request)
         {
             //Valid fields check
-            if (request.Param1 is null || request.Header1 is null || request.Header2 is null)
+            var artistId = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.ArtistId);
+            var clientID = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ClientID);
+            var clientSecret = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ClientSecret);
+            if (artistId is null || clientID is null || clientSecret is null)
                 throw new BadHttpRequestException("Error: Please provide all the required fields. (Param1/Header1/Header2)", 400);
             //Authentication HttpRequest setup
             var authClient = _httpClientFactory.CreateClient("SpotifyAuthClient");
             var AuthRequest = new HttpRequestMessage(new HttpMethod("POST"), "/api/token");
-            AuthRequest.Content = new StringContent($"grant_type=client_credentials&client_id={request.Header1}&client_secret={request.Header2}");
+            AuthRequest.Content = new StringContent($"grant_type=client_credentials&client_id={clientID}&client_secret={clientSecret}");
             AuthRequest.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
 
             var Authresponse = await authClient.SendAsync(AuthRequest);
@@ -37,7 +41,7 @@ namespace ActorApi.Api.Clients
             var auth = JsonConvert.DeserializeObject<SpotifyAuthResponse>(authStringResult);
 
             //Caching check
-            string url = $"/v1/artists/{request.Param1}";
+            string url = $"/v1/artists/{artistId}";
             if (_memoryCache.TryGetValue($"Spotify {url}", out DataActorResponse? result) && result is not null)
             {
                 return result;

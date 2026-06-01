@@ -13,8 +13,8 @@ namespace ActorApi.Api.Controllers
         /// </summary>
         /// <param name="request">Parameters for Client Request</param>
         /// <returns></returns>
-        [HttpGet("GetData")]
-        public async Task<ActionResult<DataActorResponse>> GetData([FromQuery] DataActorRequest request)
+        [HttpPost("Data")]
+        public async Task<ActionResult<DataActorResponse>> GetData([FromBody] DataActorRequest request)
         {
             var response = await _actorService.GetDataAsync(request);
 
