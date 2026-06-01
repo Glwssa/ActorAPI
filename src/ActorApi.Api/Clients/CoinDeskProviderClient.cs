@@ -3,7 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace ActorApi.Api.Clients
 {
-    public class CoinDeskDataActorClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IDataActorClient
+    public class CoinDeskProviderClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IActorProviderClient
     {
         /// <summary>
         /// Retrives the Bitcoin Price Index (BPI) in real-time

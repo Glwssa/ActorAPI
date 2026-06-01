@@ -6,7 +6,7 @@ namespace ActorApi.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ActorController(IDataActorService _dataActorService) : Controller
+    public class ActorController(IActorService _dataActorService) : Controller
     {
         /// <summary>
         /// Gets Data depending the Client requested.

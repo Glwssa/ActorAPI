@@ -3,7 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace ActorApi.Api.Clients
 {
-    public class WeatherDataActorClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IDataActorClient
+    public class OpenWeatherProviderClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IActorProviderClient
     {
         /// <summary>
         /// Retrives weather data for the requested city.

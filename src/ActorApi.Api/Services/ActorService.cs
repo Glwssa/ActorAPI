@@ -11,13 +11,13 @@ namespace ActorApi.Api.Services
     /// <param name="_NewsDataActorClient">News Client</param>
     /// <param name="_SpotifyDataActorClient">Spotify Client</param>
     /// <param name="_CoinDeskDataActorClient"> Coin Desk Client</param>
-    public class DataActorService(
-        [FromKeyedServices("Weather")] IDataActorClient _WeatherDataActorClient,
-        [FromKeyedServices("CatFacts")] IDataActorClient _CatFactsDataActorClient,
-        [FromKeyedServices("News")] IDataActorClient _NewsDataActorClient,
-        [FromKeyedServices("Spotify")] IDataActorClient _SpotifyDataActorClient,
-        [FromKeyedServices("CoinDesk")] IDataActorClient _CoinDeskDataActorClient,
-        IConfiguration _configuration) : IDataActorService
+    public class ActorService(
+        [FromKeyedServices("Weather")] IActorProviderClient _WeatherDataActorClient,
+        [FromKeyedServices("CatFacts")] IActorProviderClient _CatFactsDataActorClient,
+        [FromKeyedServices("News")] IActorProviderClient _NewsDataActorClient,
+        [FromKeyedServices("Spotify")] IActorProviderClient _SpotifyDataActorClient,
+        [FromKeyedServices("CoinDesk")] IActorProviderClient _CoinDeskDataActorClient,
+        IConfiguration _configuration) : IActorService
     {
         public Task<DataActorResponse> GetData(DataActorRequest request)
         {

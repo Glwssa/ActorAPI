@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace ActorApi.Api.Clients
 {
 
-    public class SpotifyDataActorClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IDataActorClient
+    public class SpotifyProviderClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IActorProviderClient
     {
         /// <summary>
         /// Retrives information about the requested artist 

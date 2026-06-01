@@ -45,13 +45,13 @@ namespace ActorApi.Api
                         client.BaseAddress = new Uri("https://catfact.ninja");
                     });
                 //Setup Actor Service (for every request a new ActorService is created)
-                builder.Services.AddScoped<IDataActorService, DataActorService>();
+                builder.Services.AddScoped<IActorService, ActorService>();
                 //Setup Actor Clients with Keys for easy search from Actorservice (for every request a new ActorClient is created)
-                builder.Services.AddKeyedScoped<IDataActorClient, CatFactsDataActorClient>("CatFacts");
-                builder.Services.AddKeyedScoped<IDataActorClient, WeatherDataActorClient>("Weather");
-                builder.Services.AddKeyedScoped<IDataActorClient, NewsDataActorClient>("News");
-                builder.Services.AddKeyedScoped<IDataActorClient, SpotifyDataActorClient>("Spotify");
-                builder.Services.AddKeyedScoped<IDataActorClient, CoinDeskDataActorClient>("CoinDesk");
+                builder.Services.AddKeyedScoped<IActorProviderClient, CatFactsProviderClient>("CatFacts");
+                builder.Services.AddKeyedScoped<IActorProviderClient, OpenWeatherProviderClient>("Weather");
+                builder.Services.AddKeyedScoped<IActorProviderClient, NewsProviderClient>("News");
+                builder.Services.AddKeyedScoped<IActorProviderClient, SpotifyProviderClient>("Spotify");
+                builder.Services.AddKeyedScoped<IActorProviderClient, CoinDeskProviderClient>("CoinDesk");
                 //Add Memory caching 
                 builder.Services.AddMemoryCache();
                 //Add Controllers with correct display names for Enums
