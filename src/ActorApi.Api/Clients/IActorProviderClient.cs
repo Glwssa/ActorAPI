@@ -7,6 +7,6 @@ namespace ActorApi.Api.Clients
     {
         ClientSelection ClientSelection { get; }
 
-        Task<DataActorResponse> GetDataAsync(DataActorRequest request);
+        Task<DataActorResponse> GetDataAsync(DataActorRequest request, CancellationToken cancellationToken = default);
     }
 }

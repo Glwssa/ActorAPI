@@ -15,10 +15,11 @@ namespace ActorApi.Api.Clients
         /// Retrives News data from a specific keyword that was published today.
         /// </summary>
         /// <param name="request">Request Parameters (Param1 = Article Keyword, Header1 = ApiKey)</param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="BadHttpRequestException"></exception>
         /// <exception cref="HttpIOException"></exception>
-        public async Task<DataActorResponse> GetDataAsync(DataActorRequest request)
+        public async Task<DataActorResponse> GetDataAsync(DataActorRequest request, CancellationToken cancellationToken = default)
         {
             //Valid fields check
             var article = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.Article);
@@ -51,12 +52,12 @@ namespace ActorApi.Api.Clients
             //Setup Http Request with specific day
             var client = _httpClientFactory.CreateClient("NewsClient");
             var Request = new HttpRequestMessage(new HttpMethod("GET"), url);
-            var response = await client.SendAsync(Request);
+            var response = await client.SendAsync(Request, cancellationToken);
 
             //Success response check
             if (!response.IsSuccessStatusCode)
                 throw new HttpIOException(HttpRequestError.ConnectionError, "Error: News Service was not available.");
-            var stringResult = await response.Content.ReadAsStringAsync();
+            var stringResult = await response.Content.ReadAsStringAsync(cancellationToken);
 
             //return retrived data in generic format and add it to cache
             var cachedResult = new DataActorResponse()

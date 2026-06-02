@@ -18,11 +18,12 @@ namespace ActorApi.Api.Services
         {
             _clientResolver = clientResolver;
         }
-        public Task<DataActorResponse> GetDataAsync(DataActorRequest request)
+
+        public Task<DataActorResponse> GetDataAsync(DataActorRequest request, CancellationToken cancellationToken = default)
         {
             var client = _clientResolver.Resolve(request.ClientSelection);
 
-            return client.GetDataAsync(request);
+            return client.GetDataAsync(request, cancellationToken);
         }
     }
 }

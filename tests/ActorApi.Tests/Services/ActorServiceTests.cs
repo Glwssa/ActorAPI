@@ -27,7 +27,7 @@ public sealed class ActorServiceTests
 
         var clientMock = new Mock<IActorProviderClient>();
         clientMock
-            .Setup(client => client.GetDataAsync(request))
+            .Setup(client => client.GetDataAsync(request, It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedResponse);
 
         var resolverMock = new Mock<IActorProviderClientResolver>();
@@ -38,7 +38,7 @@ public sealed class ActorServiceTests
         var service = new ActorService(resolverMock.Object);
 
         // Act
-        var result = await service.GetDataAsync(request);
+        var result = await service.GetDataAsync(request, CancellationToken.None);
 
         // Assert
         Assert.Equal(expectedResponse, result);
@@ -48,7 +48,7 @@ public sealed class ActorServiceTests
             Times.Once);
 
         clientMock.Verify(
-            client => client.GetDataAsync(request),
+            client => client.GetDataAsync(request, It.IsAny<CancellationToken>()),
             Times.Once);
     }
 }

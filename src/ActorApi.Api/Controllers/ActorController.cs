@@ -84,7 +84,7 @@ namespace ActorApi.Api.Controllers
                     validationResult.ToValidationProblemDictionary());
             }
 
-            var response = await actorService.GetDataAsync(request);
+            var response = await actorService.GetDataAsync(request, cancellationToken);
 
             return Ok(response);
         }

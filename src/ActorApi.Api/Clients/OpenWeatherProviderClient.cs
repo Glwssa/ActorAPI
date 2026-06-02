@@ -15,10 +15,11 @@ namespace ActorApi.Api.Clients
         /// Retrives weather data for the requested city.
         /// </summary>
         /// <param name="request">Request Parameters (Param1 = city, Header 1 = ApiKey)</param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="BadHttpRequestException"></exception>
         /// <exception cref="HttpIOException"></exception>
-        public async Task<DataActorResponse> GetDataAsync(DataActorRequest request)
+        public async Task<DataActorResponse> GetDataAsync(DataActorRequest request, CancellationToken cancellationToken = default)
         {
             //Valid fields check
             var city = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.City);
@@ -48,12 +49,12 @@ namespace ActorApi.Api.Clients
 
             //Setup HttpRequest
             var client = _httpClientFactory.CreateClient("OpenWeatherClient");
-            var response = await client.GetAsync(url);
+            var response = await client.GetAsync(url, cancellationToken);
             //Success response check
             if (!response.IsSuccessStatusCode)
                 throw new HttpIOException(HttpRequestError.ConnectionError, "Error: OpenWeather Service was not available.");
 
-            var stringResult = await response.Content.ReadAsStringAsync();
+            var stringResult = await response.Content.ReadAsStringAsync(cancellationToken);
 
             //return retrived data in generic format and cache it
             var cachedResult = new DataActorResponse()

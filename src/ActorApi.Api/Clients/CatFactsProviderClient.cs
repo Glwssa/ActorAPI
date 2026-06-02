@@ -12,9 +12,10 @@ namespace ActorApi.Api.Clients
         /// Retrives random cat facts
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="HttpIOException"></exception>
-        public async Task<DataActorResponse> GetDataAsync(DataActorRequest request)
+        public async Task<DataActorResponse> GetDataAsync(DataActorRequest request, CancellationToken cancellationToken = default)
         {
             //Caching check
             if (_memoryCache.TryGetValue($"CatFacts {DateTime.Now.ToString("yyyyy-MM-dd")}", out DataActorResponse? result) && result is not null)
@@ -25,12 +26,12 @@ namespace ActorApi.Api.Clients
             //Setup HttpRequest
             var client = _httpClientFactory.CreateClient("CatFacts");
             string url = $"/fact";
-            var response = await client.GetAsync(url);
+            var response = await client.GetAsync(url, cancellationToken);
             //Success response check
             if (!response.IsSuccessStatusCode)
                 throw new HttpIOException(HttpRequestError.ConnectionError, "Error: CatFacts Service was not available.");
 
-            var stringResult = await response.Content.ReadAsStringAsync();
+            var stringResult = await response.Content.ReadAsStringAsync(cancellationToken);
 
             //return retrived data in generic format and add it to the cache
             var cachedResult = new DataActorResponse()
