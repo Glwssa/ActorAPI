@@ -1,11 +1,13 @@
 ﻿using ActorApi.Api.Contracts;
 using ActorApi.Api.Domains;
 using ActorApi.Api.Extensions;
+using ActorApi.Api.Options;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 
 namespace ActorApi.Api.Clients
 {
-    public class OpenWeatherProviderClient(IHttpClientFactory _httpClientFactory, IConfiguration _configuration, IMemoryCache _memoryCache) : IActorProviderClient
+    public class OpenWeatherProviderClient(IHttpClientFactory _httpClientFactory, IOptionsSnapshot<OpenWeatherOptions> _options, IMemoryCache _memoryCache) : IActorProviderClient
     {
         public ClientSelection ClientSelection => ClientSelection.OpenWeather;
 
@@ -21,7 +23,7 @@ namespace ActorApi.Api.Clients
             //Valid fields check
             var city = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.City);
             var apiKeyFromRequest = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ApiKey);
-            var apiKeyFromConfiguration = _configuration["Providers:OpenWeather:ApiKey"];
+            var apiKeyFromConfiguration = _options.Value.ApiKey;
 
             var apiKey = !string.IsNullOrWhiteSpace(apiKeyFromRequest)
                 ? apiKeyFromRequest

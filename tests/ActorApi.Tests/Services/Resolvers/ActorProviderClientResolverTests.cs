@@ -1,9 +1,9 @@
 ﻿using ActorApi.Api.Clients;
-using ActorApi.Api.Contracts;
 using ActorApi.Api.Domains;
+using ActorApi.Api.Options;
 using ActorApi.Api.Services.Resolvers;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace ActorApi.Tests.Services.Resolvers;
@@ -24,15 +24,15 @@ public sealed class ActorProviderClientResolverTests
             .SetupGet(client => client.ClientSelection)
             .Returns(ClientSelection.OpenWeather);
 
-        var configuration = CreateConfiguration(spotifyEnabled: false);
-
         var resolver = new ActorProviderClientResolver(
             new[]
             {
-                catFactsClientMock.Object,
-                weatherClientMock.Object
+            catFactsClientMock.Object,
+            weatherClientMock.Object
             },
-            configuration);
+            CreateSpotifyOptions(enabled: false),
+            CreateNewsOptions(enabled: false),
+            CreateCoinDeskOptions(enabled: false));
 
         // Act
         var result = resolver.Resolve(ClientSelection.CatFacts);
@@ -50,11 +50,11 @@ public sealed class ActorProviderClientResolverTests
             .SetupGet(client => client.ClientSelection)
             .Returns(ClientSelection.Spotify);
 
-        var configuration = CreateConfiguration(spotifyEnabled: false);
-
         var resolver = new ActorProviderClientResolver(
             new[] { spotifyClientMock.Object },
-            configuration);
+            CreateSpotifyOptions(enabled: false),
+            CreateNewsOptions(enabled: true),
+            CreateCoinDeskOptions(enabled: false));
 
         // Act
         var exception = Assert.Throws<BadHttpRequestException>(
@@ -74,15 +74,15 @@ public sealed class ActorProviderClientResolverTests
             .SetupGet(client => client.ClientSelection)
             .Returns(ClientSelection.CatFacts);
 
-        var configuration = CreateConfiguration(spotifyEnabled: false);
-
         var resolver = new ActorProviderClientResolver(
             new[] { catFactsClientMock.Object },
-            configuration);
+            CreateSpotifyOptions(enabled: false),
+            CreateNewsOptions(enabled: false),
+            CreateCoinDeskOptions(enabled: false));
 
         // Act
         var exception = Assert.Throws<BadHttpRequestException>(
-            () => resolver.Resolve(ClientSelection.CoinDesk));
+            () => resolver.Resolve(ClientSelection.OpenWeather));
 
         // Assert
         Assert.Contains("is not supported", exception.Message);
@@ -98,13 +98,11 @@ public sealed class ActorProviderClientResolverTests
             .SetupGet(client => client.ClientSelection)
             .Returns(ClientSelection.News);
 
-        var configuration = CreateConfiguration(
-            spotifyEnabled: false,
-            newsEnabled: false);
-
         var resolver = new ActorProviderClientResolver(
             new[] { newsClientMock.Object },
-            configuration);
+            CreateSpotifyOptions(enabled: false),
+            CreateNewsOptions(enabled: false),
+            CreateCoinDeskOptions(enabled: false));
 
         // Act
         var exception = Assert.Throws<BadHttpRequestException>(
@@ -115,16 +113,69 @@ public sealed class ActorProviderClientResolverTests
         Assert.Equal(400, exception.StatusCode);
     }
 
-    private static IConfiguration CreateConfiguration(bool spotifyEnabled = false, bool newsEnabled = false)
+    [Fact]
+    public void Resolve_WhenCoinDeskIsDisabled_ThrowsBadHttpRequestException()
     {
-        var values = new Dictionary<string, string?>
-        {
-            ["Providers:Spotify:Enabled"] = spotifyEnabled.ToString(),
-            ["Providers:News:Enabled"] = newsEnabled.ToString()
-        };
+        // Arrange
+        var coinDeskClientMock = new Mock<IActorProviderClient>();
+        coinDeskClientMock
+            .SetupGet(client => client.ClientSelection)
+            .Returns(ClientSelection.CoinDesk);
 
-        return new ConfigurationBuilder()
-            .AddInMemoryCollection(values)
-            .Build();
+        var resolver = new ActorProviderClientResolver(
+            new[] { coinDeskClientMock.Object },
+            CreateSpotifyOptions(enabled: true),
+            CreateNewsOptions(enabled: true),
+            CreateCoinDeskOptions(enabled: false));
+
+        // Act
+        var exception = Assert.Throws<BadHttpRequestException>(
+            () => resolver.Resolve(ClientSelection.CoinDesk));
+
+        // Assert
+        Assert.Contains("CoinDesk provider is currently disabled", exception.Message);
+        Assert.Equal(400, exception.StatusCode);
+    }
+
+    private static IOptionsSnapshot<SpotifyOptions> CreateSpotifyOptions(bool enabled)
+    {
+        var options = new Mock<IOptionsSnapshot<SpotifyOptions>>();
+
+        options
+            .SetupGet(x => x.Value)
+            .Returns(new SpotifyOptions
+            {
+                Enabled = enabled
+            });
+
+        return options.Object;
+    }
+
+    private static IOptionsSnapshot<NewsOptions> CreateNewsOptions(bool enabled)
+    {
+        var options = new Mock<IOptionsSnapshot<NewsOptions>>();
+
+        options
+            .SetupGet(x => x.Value)
+            .Returns(new NewsOptions
+            {
+                Enabled = enabled
+            });
+
+        return options.Object;
+    }
+    private static IOptionsSnapshot<CoinDeskOptions> CreateCoinDeskOptions(bool enabled)
+    {
+        var options = new Mock<IOptionsSnapshot<CoinDeskOptions>>();
+
+        options
+            .SetupGet(x => x.Value)
+            .Returns(new CoinDeskOptions
+            {
+                Enabled = enabled
+            });
+
+        return options.Object;
     }
 }
+

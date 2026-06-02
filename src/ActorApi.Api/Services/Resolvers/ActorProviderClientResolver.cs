@@ -1,26 +1,34 @@
 ﻿using ActorApi.Api.Clients;
-using ActorApi.Api.Contracts;
 using ActorApi.Api.Domains;
+using ActorApi.Api.Options;
+using Microsoft.Extensions.Options;
 
 namespace ActorApi.Api.Services.Resolvers
 {
     public class ActorProviderClientResolver : IActorProviderClientResolver
     {
-        private readonly IReadOnlyDictionary<ClientSelection, IActorProviderClient> _clients;
-        private readonly IConfiguration _configuration;
+        private readonly IOptionsSnapshot<SpotifyOptions> _spotifyOptions;
+        private readonly IOptionsSnapshot<NewsOptions> _newsOptions;
+        private readonly IOptionsSnapshot<CoinDeskOptions> _coinDeskOptions;
+        private readonly Dictionary<ClientSelection, IActorProviderClient> _clients;
 
-        public ActorProviderClientResolver(IEnumerable<IActorProviderClient> clients,
-        IConfiguration configuration)
+        public ActorProviderClientResolver(
+            IEnumerable<IActorProviderClient> clients,
+            IOptionsSnapshot<SpotifyOptions> spotifyOptions,
+            IOptionsSnapshot<NewsOptions> newsOptions,
+            IOptionsSnapshot<CoinDeskOptions> coinDeskOptions)
         {
             _clients = clients.ToDictionary(client => client.ClientSelection);
-            _configuration = configuration;
+            _spotifyOptions = spotifyOptions;
+            _newsOptions = newsOptions;
+            _coinDeskOptions = coinDeskOptions;
         }
 
         public IActorProviderClient Resolve(ClientSelection clientSelection)
         {
             if (clientSelection == ClientSelection.Spotify)
             {
-                var spotifyEnabled = _configuration.GetValue<bool>("Providers:Spotify:Enabled");
+                var spotifyEnabled = _spotifyOptions.Value.Enabled;
 
                 if (!spotifyEnabled)
                 {
@@ -31,13 +39,19 @@ namespace ActorApi.Api.Services.Resolvers
             }
             else if(clientSelection == ClientSelection.News)
             {
-                var newsEnabled = _configuration.GetValue<bool>("Providers:News:Enabled");
+                var newsEnabled = _newsOptions.Value.Enabled;
                 if (!newsEnabled)
                 {
                     throw new BadHttpRequestException(
                         "News provider is currently disabled because of Server connection problems.",
                         400);
                 }
+            }
+            else if (clientSelection == ClientSelection.CoinDesk && !_coinDeskOptions.Value.Enabled)
+            {
+                throw new BadHttpRequestException(
+                    "CoinDesk provider is currently disabled because the existing API endpoint is unavailable or unreliable.",
+                    400);
             }
 
 

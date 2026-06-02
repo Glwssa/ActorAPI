@@ -8,7 +8,7 @@ namespace ActorApi.Api.Contracts
     /// <remarks>
     /// Supported client selections:
     /// - CatFacts: no parameters required.
-    /// - CoinDesk: no parameters required.
+    /// - CoinDesk: currently disabled because the existing API endpoint is unavailable or unreliable.
     /// - OpenWeather: parameters may include "city" and "units"; headers may include "apiKey".
     /// - News: parameters may include "query", "country", and "language"; headers may include "apiKey". (Currently disabled)
     /// - Spotify: currently disabled because authentication is pending refactoring.

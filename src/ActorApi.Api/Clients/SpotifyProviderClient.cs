@@ -1,15 +1,16 @@
 ﻿using ActorApi.Api.Contracts;
 using ActorApi.Api.Domains;
 using ActorApi.Api.Extensions;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using ActorApi.Api.Options;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
 namespace ActorApi.Api.Clients
 {
 
-    public class SpotifyProviderClient(IHttpClientFactory _httpClientFactory, IConfiguration _configuration, IMemoryCache _memoryCache) : IActorProviderClient
+    public class SpotifyProviderClient(IHttpClientFactory _httpClientFactory, IOptionsSnapshot<SpotifyOptions> _options, IMemoryCache _memoryCache) : IActorProviderClient
     {
         public ClientSelection ClientSelection => ClientSelection.Spotify;
 
@@ -27,14 +28,14 @@ namespace ActorApi.Api.Clients
             var clientIdFromRequest = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ClientID);
             var clientSecretFromRequest = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ClientSecret);
 
-            var clientIdFromConfiguration = _configuration["Providers:SpotifyCridentials:ClientId"];
-            var clientSecretFromConfiguration = _configuration["Providers:SpotifyCridentials:ClientSecret"];
+            var clientIdFromConfiguration = _options.Value.ClientId;
+            var clientSecretFromConfiguration = _options.Value.ClientSecret;
 
-            var clientId = !string.IsNullOrWhiteSpace(clientIdFromConfiguration)
+            var clientId = !string.IsNullOrWhiteSpace(clientIdFromRequest)
                 ? clientIdFromRequest
                 : clientIdFromConfiguration;
 
-            var clientSecret = !string.IsNullOrWhiteSpace(clientSecretFromConfiguration)
+            var clientSecret = !string.IsNullOrWhiteSpace(clientSecretFromRequest)
                 ? clientSecretFromRequest
                 : clientSecretFromConfiguration;
 

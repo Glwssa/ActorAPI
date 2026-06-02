@@ -19,6 +19,14 @@ namespace ActorApi.Api.Controllers
         ///       "parameters": {},
         ///       "headers": {}
         ///     }
+        ///     
+        /// Example request for CoinDesk, currently disabled:
+        ///
+        ///     {
+        ///       "clientSelection": "CoinDesk",
+        ///       "parameters": {},
+        ///       "headers": {}
+        ///     }
         ///
         /// Example request for OpenWeather:
         ///
@@ -33,7 +41,7 @@ namespace ActorApi.Api.Controllers
         ///       }
         ///     }
         ///
-        /// Example request for News:
+        /// Example request for News: (Disabled)
         ///
         ///     {
         ///       "clientSelection": "News",

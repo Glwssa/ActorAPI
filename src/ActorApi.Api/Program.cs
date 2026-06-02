@@ -1,8 +1,9 @@
 using ActorApi.Api.Clients;
+using ActorApi.Api.Options;
 using ActorApi.Api.Services;
 using ActorApi.Api.Services.Resolvers;
-using System.Text.Json.Serialization;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace ActorApi.Api
 {
@@ -15,36 +16,70 @@ namespace ActorApi.Api
                 // Add services to the container.
 
                 //Setup HttpClientFactory services
-                builder.Services.AddHttpClient("OpenWeatherClient",
-                    client =>
-                    {
-                        client.BaseAddress = new Uri("http://api.openweathermap.org");
-                    });
-                builder.Services.AddHttpClient("CoinDesk",
-                    client =>
-                    {
-                        client.BaseAddress = new Uri("https://api.coindesk.com");
-                    });
-                builder.Services.AddHttpClient("SpotifyClient",
-                    client =>
-                    {
-                        client.BaseAddress = new Uri("https://api.spotify.com");
-                    });
-                builder.Services.AddHttpClient("SpotifyAuthClient",
-                    client =>
-                    {
-                        client.BaseAddress = new Uri("https://accounts.spotify.com");
-                    });
-                builder.Services.AddHttpClient("NewsClient",
-                    client =>
-                    {
-                        client.BaseAddress = new Uri("https://newsapi.org");
-                    });
-                builder.Services.AddHttpClient("CatFacts",
-                    client =>
-                    {
-                        client.BaseAddress = new Uri("https://catfact.ninja");
-                    });
+                builder.Services.Configure<OpenWeatherOptions>(
+                    builder.Configuration.GetSection(OpenWeatherOptions.SectionName));
+
+                builder.Services.Configure<CoinDeskOptions>(
+                    builder.Configuration.GetSection(CoinDeskOptions.SectionName));
+
+                builder.Services.Configure<CatFactsOptions>(
+                    builder.Configuration.GetSection(CatFactsOptions.SectionName));
+
+                builder.Services.Configure<SpotifyOptions>(
+                    builder.Configuration.GetSection(SpotifyOptions.SectionName));
+
+                builder.Services.Configure<NewsOptions>(
+                    builder.Configuration.GetSection(NewsOptions.SectionName));
+
+                builder.Services.AddHttpClient("OpenWeatherClient", client =>
+                {
+                    var options = builder.Configuration
+                        .GetSection(OpenWeatherOptions.SectionName)
+                        .Get<OpenWeatherOptions>() ?? new OpenWeatherOptions();
+
+                    client.BaseAddress = new Uri(options.BaseUrl);
+                });
+                builder.Services.AddHttpClient("CoinDesk", client =>
+                {
+                    var options = builder.Configuration
+                        .GetSection(CoinDeskOptions.SectionName)
+                        .Get<CoinDeskOptions>() ?? new CoinDeskOptions();
+
+                    client.BaseAddress = new Uri(options.BaseUrl);
+                });
+                builder.Services.AddHttpClient("SpotifyClient", client =>
+                {
+                    var options = builder.Configuration
+                        .GetSection(SpotifyOptions.SectionName)
+                        .Get<SpotifyOptions>() ?? new SpotifyOptions();
+
+                    client.BaseAddress = new Uri(options.BaseUrl);
+                });
+
+                builder.Services.AddHttpClient("SpotifyAuthClient", client =>
+                {
+                    var options = builder.Configuration
+                        .GetSection(SpotifyOptions.SectionName)
+                        .Get<SpotifyOptions>() ?? new SpotifyOptions();
+
+                    client.BaseAddress = new Uri(options.AuthBaseUrl);
+                });
+                builder.Services.AddHttpClient("NewsClient", client =>
+                {
+                    var options = builder.Configuration
+                        .GetSection(NewsOptions.SectionName)
+                        .Get<NewsOptions>() ?? new NewsOptions();
+
+                    client.BaseAddress = new Uri(options.BaseUrl);
+                });
+                builder.Services.AddHttpClient("CatFacts", client =>
+                {
+                    var options = builder.Configuration
+                        .GetSection(CatFactsOptions.SectionName)
+                        .Get<CatFactsOptions>() ?? new CatFactsOptions();
+
+                    client.BaseAddress = new Uri(options.BaseUrl);
+                });
                 //Setup Actor Service (for every request a new ActorService is created)
                 builder.Services.AddScoped<IActorService, ActorService>();
                 builder.Services.AddScoped<IActorProviderClientResolver, ActorProviderClientResolver>();
