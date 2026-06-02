@@ -1,4 +1,4 @@
-﻿namespace ActorApi.Api.Options;
+namespace ActorApi.Api.Options;
 
 public sealed class CoinDeskOptions
 {
@@ -8,3 +8,5 @@ public sealed class CoinDeskOptions
 
     public string BaseUrl { get; set; } = "https://api.coindesk.com";
 }
+
+

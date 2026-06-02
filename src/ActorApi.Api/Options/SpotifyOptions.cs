@@ -1,4 +1,4 @@
-﻿namespace ActorApi.Api.Options;
+namespace ActorApi.Api.Options;
 
 public sealed class SpotifyOptions
 {
@@ -14,3 +14,5 @@ public sealed class SpotifyOptions
 
     public string? ClientSecret { get; set; }
 }
+
+

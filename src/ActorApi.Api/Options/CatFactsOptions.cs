@@ -1,4 +1,4 @@
-﻿namespace ActorApi.Api.Options;
+namespace ActorApi.Api.Options;
 
 public sealed class CatFactsOptions
 {
@@ -6,3 +6,5 @@ public sealed class CatFactsOptions
 
     public string BaseUrl { get; set; } = "https://catfact.ninja";
 }
+
+

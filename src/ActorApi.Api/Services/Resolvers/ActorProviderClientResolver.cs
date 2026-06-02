@@ -1,4 +1,4 @@
-﻿using ActorApi.Api.Clients;
+using ActorApi.Api.Clients;
 using ActorApi.Api.Domains;
 using ActorApi.Api.Options;
 using Microsoft.Extensions.Options;
@@ -37,7 +37,7 @@ namespace ActorApi.Api.Services.Resolvers
                         400);
                 }
             }
-            else if(clientSelection == ClientSelection.News)
+            else if (clientSelection == ClientSelection.News)
             {
                 var newsEnabled = _newsOptions.Value.Enabled;
                 if (!newsEnabled)
@@ -66,3 +66,6 @@ namespace ActorApi.Api.Services.Resolvers
         }
     }
 }
+
+
+

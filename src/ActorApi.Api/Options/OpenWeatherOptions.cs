@@ -1,4 +1,4 @@
-﻿namespace ActorApi.Api.Options;
+namespace ActorApi.Api.Options;
 
 public sealed class OpenWeatherOptions
 {
@@ -8,3 +8,5 @@ public sealed class OpenWeatherOptions
 
     public string? ApiKey { get; set; }
 }
+
+

@@ -1,4 +1,4 @@
-﻿using ActorApi.Api.Clients;
+using ActorApi.Api.Clients;
 using ActorApi.Api.Domains;
 using ActorApi.Api.Options;
 using ActorApi.Api.Services.Resolvers;
@@ -178,4 +178,7 @@ public sealed class ActorProviderClientResolverTests
         return options.Object;
     }
 }
+
+
+
 

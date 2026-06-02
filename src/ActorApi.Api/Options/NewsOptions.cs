@@ -1,4 +1,4 @@
-﻿namespace ActorApi.Api.Options;
+namespace ActorApi.Api.Options;
 
 public sealed class NewsOptions
 {
@@ -10,3 +10,5 @@ public sealed class NewsOptions
 
     public string? ApiKey { get; set; }
 }
+
+

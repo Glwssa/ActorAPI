@@ -1,4 +1,4 @@
-﻿using ActorApi.Api.Domains;
+using ActorApi.Api.Domains;
 
 namespace ActorApi.Api.Contracts
 {
@@ -39,3 +39,6 @@ namespace ActorApi.Api.Contracts
         public Dictionary<string, string> Headers { get; set; } = [];
     }
 }
+
+
+
