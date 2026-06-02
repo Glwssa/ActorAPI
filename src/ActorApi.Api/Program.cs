@@ -2,6 +2,7 @@ using ActorApi.Api.Clients;
 using ActorApi.Api.Services;
 using ActorApi.Api.Services.Resolvers;
 using System.Text.Json.Serialization;
+using System.Reflection;
 
 namespace ActorApi.Api
 {
@@ -62,8 +63,16 @@ namespace ActorApi.Api
                         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
                 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
                 builder.Services.AddEndpointsApiExplorer();
-                builder.Services.AddSwaggerGen();
+                builder.Services.AddSwaggerGen(options =>
+                {
+                    var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                    var xmlFilePath = Path.Combine(AppContext.BaseDirectory, xmlFileName);
 
+                    if (File.Exists(xmlFilePath))
+                    {
+                        options.IncludeXmlComments(xmlFilePath);
+                    }
+                });
             }
 
 

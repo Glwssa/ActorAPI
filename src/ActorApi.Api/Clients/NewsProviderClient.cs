@@ -5,7 +5,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace ActorApi.Api.Clients
 {
-    public class NewsProviderClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IActorProviderClient
+    public class NewsProviderClient(IHttpClientFactory _httpClientFactory, IConfiguration _configuration, IMemoryCache _memoryCache) : IActorProviderClient
     {
         public ClientSelection ClientSelection => ClientSelection.News;
 
@@ -20,11 +20,26 @@ namespace ActorApi.Api.Clients
         {
             //Valid fields check
             var article = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.Article);
-            var key = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ApiKey);
-            if (article is null || key is null)
-                throw new BadHttpRequestException("Error: Please provide all the required fields. (Param1/Header1)", 400);
+            var apiKeyFromRequest = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ApiKey);
+            var apiKeyFromConfiguration = _configuration["Providers:News:ApiKey"];
+
+            var apiKey = !string.IsNullOrWhiteSpace(apiKeyFromRequest)
+                ? apiKeyFromRequest
+                : apiKeyFromConfiguration;
+
+            if (article is null )
+                throw new BadHttpRequestException("Error: Please provide all the required fields.", 400);
+
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                throw new BadHttpRequestException(
+                    "NewsProvider requires an API key. Provide it through user-secrets, environment variables, or the request headers dictionary using key 'apiKey'.",
+                    400);
+            }
+
             DateTime dateToday = DateTime.Now;
-            string url = $"/v2/everything?q={article}&from={dateToday.ToString("yyyy-MM-dd")}&sortBy=publishedAt&apiKey={key}";
+            string url = $"/v2/everything?q={article}&from={dateToday.ToString("yyyy-MM-dd")}&sortBy=publishedAt&apiKey={apiKey}";
+
             //caching check
             if (_memoryCache.TryGetValue($"News {url}", out DataActorResponse? result) && result is not null)
             {
@@ -35,6 +50,7 @@ namespace ActorApi.Api.Clients
             var client = _httpClientFactory.CreateClient("NewsClient");
             var Request = new HttpRequestMessage(new HttpMethod("GET"), url);
             var response = await client.SendAsync(Request);
+
             //Success response check
             if (!response.IsSuccessStatusCode)
                 throw new HttpIOException(HttpRequestError.ConnectionError, "Error: News Service was not available.");

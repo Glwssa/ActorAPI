@@ -5,7 +5,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace ActorApi.Api.Clients
 {
-    public class OpenWeatherProviderClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IActorProviderClient
+    public class OpenWeatherProviderClient(IHttpClientFactory _httpClientFactory, IConfiguration _configuration, IMemoryCache _memoryCache) : IActorProviderClient
     {
         public ClientSelection ClientSelection => ClientSelection.OpenWeather;
 
@@ -20,9 +20,23 @@ namespace ActorApi.Api.Clients
         {
             //Valid fields check
             var city = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.City);
-            var apiKey = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ApiKey);
-            if (city is null || apiKey is null)
-                throw new BadHttpRequestException("Error: Please provide all the required fields. (Param1/Header1)", 400);
+            var apiKeyFromRequest = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ApiKey);
+            var apiKeyFromConfiguration = _configuration["Providers:OpenWeather:ApiKey"];
+
+            var apiKey = !string.IsNullOrWhiteSpace(apiKeyFromRequest)
+                ? apiKeyFromRequest
+                : apiKeyFromConfiguration;
+
+            if (city is null )
+                throw new BadHttpRequestException("Error: Please provide all the required fields.", 400);
+
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                throw new BadHttpRequestException(
+                    "OpenWeather requires an API key. Provide it through user-secrets, environment variables, or the request headers dictionary using key 'apiKey'.",
+                    400);
+            }
+
             //caching check
             string url = $"/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
             if (_memoryCache.TryGetValue($"OpenWeather {url}", out DataActorResponse? result) && result is not null)

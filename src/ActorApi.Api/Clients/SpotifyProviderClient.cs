@@ -1,6 +1,7 @@
 ﻿using ActorApi.Api.Contracts;
 using ActorApi.Api.Domains;
 using ActorApi.Api.Extensions;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -8,7 +9,7 @@ using System.Net.Http.Headers;
 namespace ActorApi.Api.Clients
 {
 
-    public class SpotifyProviderClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IActorProviderClient
+    public class SpotifyProviderClient(IHttpClientFactory _httpClientFactory, IConfiguration _configuration, IMemoryCache _memoryCache) : IActorProviderClient
     {
         public ClientSelection ClientSelection => ClientSelection.Spotify;
 
@@ -23,14 +24,40 @@ namespace ActorApi.Api.Clients
         {
             //Valid fields check
             var artistId = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.ArtistId);
-            var clientID = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ClientID);
-            var clientSecret = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ClientSecret);
-            if (artistId is null || clientID is null || clientSecret is null)
-                throw new BadHttpRequestException("Error: Please provide all the required fields. (Param1/Header1/Header2)", 400);
+            var clientIdFromRequest = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ClientID);
+            var clientSecretFromRequest = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ClientSecret);
+
+            var clientIdFromConfiguration = _configuration["Providers:SpotifyCridentials:ClientId"];
+            var clientSecretFromConfiguration = _configuration["Providers:SpotifyCridentials:ClientSecret"];
+
+            var clientId = !string.IsNullOrWhiteSpace(clientIdFromConfiguration)
+                ? clientIdFromRequest
+                : clientIdFromConfiguration;
+
+            var clientSecret = !string.IsNullOrWhiteSpace(clientSecretFromConfiguration)
+                ? clientSecretFromRequest
+                : clientSecretFromConfiguration;
+
+            if (artistId is null)
+                throw new BadHttpRequestException("Error: Please provide all the required fields.", 400);
+
+            if (string.IsNullOrWhiteSpace(clientId))
+            {
+                throw new BadHttpRequestException(
+                    "Spotify requires client ID . Provide it through user-secrets, environment variables, or the request headers dictionary using key 'clientId'.",
+                    400);
+            }
+            if (string.IsNullOrWhiteSpace(clientSecret))
+            {
+                throw new BadHttpRequestException(
+                    "Spotify requires client secret. Provide it through user-secrets, environment variables, or the request headers dictionary using key 'clientSecret'.",
+                    400);
+            }
+
             //Authentication HttpRequest setup
             var authClient = _httpClientFactory.CreateClient("SpotifyAuthClient");
             var AuthRequest = new HttpRequestMessage(new HttpMethod("POST"), "/api/token");
-            AuthRequest.Content = new StringContent($"grant_type=client_credentials&client_id={clientID}&client_secret={clientSecret}");
+            AuthRequest.Content = new StringContent($"grant_type=client_credentials&client_id={clientId}&client_secret={clientSecret}");
             AuthRequest.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
 
             var Authresponse = await authClient.SendAsync(AuthRequest);

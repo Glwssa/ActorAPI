@@ -29,6 +29,17 @@ namespace ActorApi.Api.Services.Resolvers
                         400);
                 }
             }
+            else if(clientSelection == ClientSelection.News)
+            {
+                var newsEnabled = _configuration.GetValue<bool>("Providers:News:Enabled");
+                if (!newsEnabled)
+                {
+                    throw new BadHttpRequestException(
+                        "News provider is currently disabled because of Server connection problems.",
+                        400);
+                }
+            }
+
 
             if (_clients.TryGetValue(clientSelection, out var client))
             {

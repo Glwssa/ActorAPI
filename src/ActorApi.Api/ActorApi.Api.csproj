@@ -6,6 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ActorApi.Api</RootNamespace>
     <AssemblyName>ActorApi.Api</AssemblyName>
+    <UserSecretsId>a59c9b52-0398-4fb3-9b4e-05de6a727ba9</UserSecretsId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
