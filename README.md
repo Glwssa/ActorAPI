@@ -1,39 +1,42 @@
 # ActorAPI
 
-A .NET Web API utilizes Dependency Injection to dynamically route requests to various HTTP clients. By simply invoking the GetData endpoint with the appropriate ClientSelection and RequestData parameters, the ActorService selects and engages the designated HTTP client to execute the specified GetData method. 
+ActorAPI is a modernized .NET backend API that routes generic provider requests to external API clients through a provider resolver.
 
-List of Clients:
-  - OpenWeather:
-      Retrives real time weather data for the requested city using the OpenWeather API.
-    
-    Data Required for Request:
-      --Param1 = City Name.
-      --Header1 = ApiKey
-  - Spotify:
-      Retrives information abouta a requested Artist using the Spotify API.
-    
-    Data Required for Request:
-      --Param1 = Artist ID.
-      --Header1 = Client ID
-      --Header2 = Client Secret
-  - News:
-      Retrives News data from a specific keyword that was published today using the newsapi.
-    
-    Data Required for Request:
-      --Param1 = Article Keyword.
-      --Header1 = ApiKey
-  - CoinDesk:
-      Retrives the Bitcoin Price Index (BPI) in real-time.
-    
-    Data Required for Request:
-      None
-  - CateFacts:
-      Retrives random cat facts
-    
-    Data Required for Request:
-      None
+The project demonstrates:
 
-NOTE: Example Params and Headers for each Client are located in appsetting.Development.json
+- ASP.NET Core Web API
+- Dependency Injection
+- HttpClientFactory
+- Provider-based client routing
+- Swagger/OpenAPI documentation
+- XML documentation comments
+- User Secrets support
+- Unit tests with xUnit and Moq
+- .NET 10
+
+## Current status
+
+This is a modernization/refactor branch of an older demo project.
+
+Currently supported providers:
+
+| Provider | Status | Required parameters | Required headers |
+|---|---|---|---|
+| CatFacts | Enabled | None | None |
+| CoinDesk | Enabled | None | None |
+| OpenWeather | Enabled | `city`, optional `units` | Optional `apiKey` override |
+| Spotify | Disabled | `artistId` | `clientId`, `clientSecret` |
+| News | Disabled | `query`, `country`, `language` | Optional `apiKey` override |
+
+Spotify is disabled because authentication needs to be refactored.
+News is disabled because the current provider integration is no longer reliable.
+
+## Request format
+
+Endpoint:
+
+```http
+POST /Actor/Data
 
 List of To-Do Clients:
   - Google Translate

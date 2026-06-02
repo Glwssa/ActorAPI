@@ -89,11 +89,38 @@ public sealed class ActorProviderClientResolverTests
         Assert.Equal(400, exception.StatusCode);
     }
 
-    private static IConfiguration CreateConfiguration(bool spotifyEnabled)
+    [Fact]
+    public void Resolve_WhenNewsIsDisabled_ThrowsBadHttpRequestException()
+    {
+        // Arrange
+        var newsClientMock = new Mock<IActorProviderClient>();
+        newsClientMock
+            .SetupGet(client => client.ClientSelection)
+            .Returns(ClientSelection.News);
+
+        var configuration = CreateConfiguration(
+            spotifyEnabled: false,
+            newsEnabled: false);
+
+        var resolver = new ActorProviderClientResolver(
+            new[] { newsClientMock.Object },
+            configuration);
+
+        // Act
+        var exception = Assert.Throws<BadHttpRequestException>(
+            () => resolver.Resolve(ClientSelection.News));
+
+        // Assert
+        Assert.Contains("News provider is currently disabled", exception.Message);
+        Assert.Equal(400, exception.StatusCode);
+    }
+
+    private static IConfiguration CreateConfiguration(bool spotifyEnabled = false, bool newsEnabled = false)
     {
         var values = new Dictionary<string, string?>
         {
-            ["Providers:Spotify:Enabled"] = spotifyEnabled.ToString()
+            ["Providers:Spotify:Enabled"] = spotifyEnabled.ToString(),
+            ["Providers:News:Enabled"] = newsEnabled.ToString()
         };
 
         return new ConfigurationBuilder()
