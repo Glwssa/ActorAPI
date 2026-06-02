@@ -1,8 +1,11 @@
 using ActorApi.Api.Clients;
+using ActorApi.Api.Contracts;
 using ActorApi.Api.ExceptionHandling;
 using ActorApi.Api.Options;
 using ActorApi.Api.Services;
 using ActorApi.Api.Services.Resolvers;
+using ActorApi.Api.Validators;
+using FluentValidation;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -90,6 +93,8 @@ namespace ActorApi.Api
                 builder.Services.AddScoped<IActorProviderClient, NewsProviderClient>();
                 builder.Services.AddScoped<IActorProviderClient, SpotifyProviderClient>();
                 builder.Services.AddScoped<IActorProviderClient, CoinDeskProviderClient>();
+                //Setup FluentValidation for DataActorRequest (for every request a new DataActorRequestValidator is created)
+                builder.Services.AddScoped<IValidator<DataActorRequest>, DataActorRequestValidator>();
 
                 //Add Memory caching 
                 builder.Services.AddMemoryCache();
