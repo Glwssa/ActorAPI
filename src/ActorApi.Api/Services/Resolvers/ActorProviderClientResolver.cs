@@ -1,5 +1,6 @@
 using ActorApi.Api.Clients;
 using ActorApi.Api.Domains;
+using ActorApi.Api.Exceptions;
 using ActorApi.Api.Options;
 using Microsoft.Extensions.Options;
 
@@ -32,9 +33,9 @@ namespace ActorApi.Api.Services.Resolvers
 
                 if (!spotifyEnabled)
                 {
-                    throw new BadHttpRequestException(
-                        "Spotify provider is currently disabled because it requires authentication refactoring.",
-                        400);
+                    throw new ProviderDisabledException(
+                        ClientSelection.Spotify,
+                        "it requires authentication refactoring");
                 }
             }
             else if (clientSelection == ClientSelection.News)
@@ -42,16 +43,16 @@ namespace ActorApi.Api.Services.Resolvers
                 var newsEnabled = _newsOptions.Value.Enabled;
                 if (!newsEnabled)
                 {
-                    throw new BadHttpRequestException(
-                        "News provider is currently disabled because of Server connection problems.",
-                        400);
+                    throw new ProviderDisabledException(
+                        ClientSelection.News,
+                        "the existing provider integration is no longer reliable");
                 }
             }
             else if (clientSelection == ClientSelection.CoinDesk && !_coinDeskOptions.Value.Enabled)
             {
-                throw new BadHttpRequestException(
-                    "CoinDesk provider is currently disabled because the existing API endpoint is unavailable or unreliable.",
-                    400);
+                throw new ProviderDisabledException(
+                    ClientSelection.CoinDesk,
+                    "the existing API endpoint is unavailable or unreliable");
             }
 
 
@@ -60,9 +61,7 @@ namespace ActorApi.Api.Services.Resolvers
                 return client;
             }
 
-            throw new BadHttpRequestException(
-                $"Provider '{clientSelection}' is not supported.",
-                400);
+            throw new ProviderNotSupportedException(clientSelection);
         }
     }
 }

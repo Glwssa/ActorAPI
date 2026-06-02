@@ -1,4 +1,5 @@
 using ActorApi.Api.Clients;
+using ActorApi.Api.ExceptionHandling;
 using ActorApi.Api.Options;
 using ActorApi.Api.Services;
 using ActorApi.Api.Services.Resolvers;
@@ -109,7 +110,9 @@ namespace ActorApi.Api
                     }
                 });
             }
-
+            //Add global exception handling and problem details services
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddProblemDetails();
 
             var app = builder.Build();
             {
@@ -124,6 +127,7 @@ namespace ActorApi.Api
 
                 app.UseAuthorization();
 
+                app.UseExceptionHandler();
 
                 app.MapControllers();
 

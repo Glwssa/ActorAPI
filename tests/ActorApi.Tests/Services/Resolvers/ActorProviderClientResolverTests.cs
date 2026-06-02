@@ -1,8 +1,8 @@
 using ActorApi.Api.Clients;
 using ActorApi.Api.Domains;
+using ActorApi.Api.Exceptions;
 using ActorApi.Api.Options;
 using ActorApi.Api.Services.Resolvers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Moq;
 
@@ -42,7 +42,7 @@ public sealed class ActorProviderClientResolverTests
     }
 
     [Fact]
-    public void Resolve_WhenSpotifyIsDisabled_ThrowsBadHttpRequestException()
+    public void Resolve_WhenSpotifyIsDisabled_ThrowsProviderDisabledException()
     {
         // Arrange
         var spotifyClientMock = new Mock<IActorProviderClient>();
@@ -57,12 +57,13 @@ public sealed class ActorProviderClientResolverTests
             CreateCoinDeskOptions(enabled: false));
 
         // Act
-        var exception = Assert.Throws<BadHttpRequestException>(
+        var exception = Assert.Throws<ProviderDisabledException>(
             () => resolver.Resolve(ClientSelection.Spotify));
 
         // Assert
         Assert.Contains("Spotify provider is currently disabled", exception.Message);
         Assert.Equal(400, exception.StatusCode);
+        Assert.Equal("Provider disabled", exception.Title);
     }
 
     [Fact]
@@ -81,16 +82,17 @@ public sealed class ActorProviderClientResolverTests
             CreateCoinDeskOptions(enabled: false));
 
         // Act
-        var exception = Assert.Throws<BadHttpRequestException>(
+        var exception = Assert.Throws<ProviderNotSupportedException>(
             () => resolver.Resolve(ClientSelection.OpenWeather));
 
         // Assert
         Assert.Contains("is not supported", exception.Message);
         Assert.Equal(400, exception.StatusCode);
+        Assert.Equal("Provider not supported", exception.Title);
     }
 
     [Fact]
-    public void Resolve_WhenNewsIsDisabled_ThrowsBadHttpRequestException()
+    public void Resolve_WhenNewsIsDisabled_ThrowsProviderDisabledException()
     {
         // Arrange
         var newsClientMock = new Mock<IActorProviderClient>();
@@ -105,16 +107,17 @@ public sealed class ActorProviderClientResolverTests
             CreateCoinDeskOptions(enabled: false));
 
         // Act
-        var exception = Assert.Throws<BadHttpRequestException>(
+        var exception = Assert.Throws<ProviderDisabledException>(
             () => resolver.Resolve(ClientSelection.News));
 
         // Assert
         Assert.Contains("News provider is currently disabled", exception.Message);
         Assert.Equal(400, exception.StatusCode);
+        Assert.Equal("Provider disabled", exception.Title);
     }
 
     [Fact]
-    public void Resolve_WhenCoinDeskIsDisabled_ThrowsBadHttpRequestException()
+    public void Resolve_WhenCoinDeskIsDisabled_ThrowsProviderDisabledException()
     {
         // Arrange
         var coinDeskClientMock = new Mock<IActorProviderClient>();
@@ -129,12 +132,13 @@ public sealed class ActorProviderClientResolverTests
             CreateCoinDeskOptions(enabled: false));
 
         // Act
-        var exception = Assert.Throws<BadHttpRequestException>(
+        var exception = Assert.Throws<ProviderDisabledException>(
             () => resolver.Resolve(ClientSelection.CoinDesk));
 
         // Assert
         Assert.Contains("CoinDesk provider is currently disabled", exception.Message);
         Assert.Equal(400, exception.StatusCode);
+        Assert.Equal("Provider disabled", exception.Title);
     }
 
     private static IOptionsSnapshot<SpotifyOptions> CreateSpotifyOptions(bool enabled)
