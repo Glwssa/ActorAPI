@@ -1,14 +1,26 @@
 # ActorAPI
 
-ActorAPI is a .NET Web API that uses dependency injection and provider-based routing to call different external HTTP clients through a single API endpoint.
+ActorAPI is a .NET 10 Web API that routes generic provider requests to external HTTP clients through a provider resolver.
 
-The project started as a small API routing demo and is currently being modernized into a cleaner backend portfolio project. The current version keeps the original idea but improves the project structure, naming, tests, request contract, and Swagger documentation.
+The project exposes a single request model that contains a selected provider, a dictionary of provider-specific parameters, and a dictionary of optional header or credential overrides. The request is validated, routed to the correct provider client, executed through `HttpClientFactory`, and returned as a generic response.
 
-## What the project does
+## Features
 
-ActorAPI receives a request with a selected client type and provider-specific parameters.
+* ASP.NET Core Web API
+* .NET 10
+* Provider-based request routing
+* `HttpClientFactory`
+* Typed provider options
+* Manual FluentValidation request validation
+* Centralized exception handling
+* ProblemDetails error responses
+* In-memory caching
+* Swagger/OpenAPI documentation
+* XML documentation comments
+* xUnit and Moq tests
+* User Secrets support for local credentials
 
-The request is handled by the controller, passed to the `ActorService`, and then routed through the `ActorProviderClientResolver` to the correct provider client.
+## Architecture
 
 ```text
 Controller
@@ -18,17 +30,15 @@ Controller
         -> External API
 ```
 
-## Main technologies
+### Main flow
 
-* .NET 10
-* ASP.NET Core Web API
-* Dependency Injection
-* `HttpClientFactory`
-* Swagger / OpenAPI
-* XML documentation comments
-* User Secrets for local API keys
-* xUnit
-* Moq
+1. `ActorController` receives a `DataActorRequest`.
+2. `DataActorRequestValidator` validates the request.
+3. `ActorService` delegates provider selection to `ActorProviderClientResolver`.
+4. `ActorProviderClientResolver` selects the correct `IActorProviderClient`.
+5. The selected provider client calls the external API.
+6. The API returns a `DataActorResponse`.
+7. Errors are handled through centralized exception handling and returned as ProblemDetails responses.
 
 ## Project structure
 
@@ -39,14 +49,21 @@ ActorAPI/
       Clients/
       Contracts/
       Controllers/
-      Domains/
+      Domain/
+      ExceptionHandling/
+      Exceptions/
+      Extensions/
+      Options/
+      Services/
+        Resolvers/
+      Validators/
+
+  tests/
+    ActorApi.Tests/
       Extensions/
       Services/
         Resolvers/
-  tests/
-    ActorApi.Tests/
-      Services/
-        Resolvers/
+      Validators/
 ```
 
 ## Main endpoint
@@ -55,19 +72,9 @@ ActorAPI/
 POST /Actor/Data
 ```
 
-The endpoint accepts a generic request body:
-
-```json
-{
-  "clientSelection": "CatFacts",
-  "parameters": {},
-  "headers": {}
-}
-```
-
 ## Request contract
 
-The API uses a generic dictionary-based request contract.
+The API uses a generic dictionary-based request model.
 
 ```json
 {
@@ -83,21 +90,59 @@ The API uses a generic dictionary-based request contract.
 
 ### Fields
 
-| Field             | Description                                             |
-| ----------------- | ------------------------------------------------------- |
-| `clientSelection` | Selects which provider client should handle the request |
-| `parameters`      | Provider-specific query/request parameters              |
-| `headers`         | Provider-specific headers or local credential overrides |
+| Field             | Description                                               |
+| ----------------- | --------------------------------------------------------- |
+| `clientSelection` | The provider that should handle the request               |
+| `parameters`      | Provider-specific request/query values                    |
+| `headers`         | Optional provider-specific header or credential overrides |
 
-This replaced the older `Param1`, `Param2`, `Header1`, and `Header2` fields with a cleaner dictionary-based structure.
+## Response contract
 
-## Current clients
+The API returns a generic response shape.
+
+```json
+{
+  "apiName": "CatFacts",
+  "url": "https://catfact.ninja/fact",
+  "body": "{ ... }"
+}
+```
+
+### Fields
+
+| Field     | Description                                         |
+| --------- | --------------------------------------------------- |
+| `apiName` | Name of the provider that handled the request       |
+| `url`     | External URL that was called                        |
+| `body`    | Raw response body returned by the external provider |
+
+## Current providers
+
+| Provider    | Status   | Notes                                                                   |
+| ----------- | -------- | ----------------------------------------------------------------------- |
+| CatFacts    | Enabled  | Returns a random cat fact                                               |
+| OpenWeather | Enabled  | Requires `city`; API key can come from User Secrets or `headers.apiKey` |
+| Spotify     | Disabled | Authentication flow needs refactoring                                   |
+| News        | Disabled | Current endpoint is unavailable or unreliable                                  |
+| CoinDesk    | Disabled | Current endpoint is unavailable or unreliable                           |
+
+## Provider examples
+
+### CatFacts
+
+CatFacts does not require parameters or headers.
+
+```json
+{
+  "clientSelection": "CatFacts",
+  "parameters": {},
+  "headers": {}
+}
+```
 
 ### OpenWeather
 
-Retrieves real-time weather data for a requested city using the OpenWeather API.
-
-Example request:
+OpenWeather requires a city.
 
 ```json
 {
@@ -112,27 +157,11 @@ Example request:
 }
 ```
 
-Expected request values:
-
-| Type      | Key      | Description                                         |
-| --------- | -------- | --------------------------------------------------- |
-| Parameter | `city`   | City name, for example `Athens`                     |
-| Parameter | `units`  | Optional unit system, for example `metric`          |
-| Header    | `apiKey` | Optional API key override for local Swagger testing |
-
-The API key can also be provided through configuration or User Secrets.
-
----
+If `headers.apiKey` is not provided, the application attempts to read the API key from configuration/User Secrets.
 
 ### Spotify
 
-Retrieves information about a requested artist using the Spotify API.
-
-Current status: **disabled**
-
-Spotify is currently disabled because its authentication flow needs to be refactored.
-
-Example request shape:
+Spotify is currently disabled.
 
 ```json
 {
@@ -147,25 +176,9 @@ Example request shape:
 }
 ```
 
-Expected request values:
-
-| Type      | Key            | Description               |
-| --------- | -------------- | ------------------------- |
-| Parameter | `artistId`     | Spotify artist identifier |
-| Header    | `clientId`     | Spotify client ID         |
-| Header    | `clientSecret` | Spotify client secret     |
-
----
-
 ### News
 
-Retrieves news data from a specific keyword.
-
-Current status: **disabled**
-
-News is currently disabled because the existing provider integration appears to be unavailable or unreliable.
-
-Example request shape:
+News is currently disabled.
 
 ```json
 {
@@ -181,22 +194,9 @@ Example request shape:
 }
 ```
 
-Expected request values:
-
-| Type      | Key        | Description                              |
-| --------- | ---------- | ---------------------------------------- |
-| Parameter | `query`    | Article keyword or search term           |
-| Parameter | `country`  | Optional country code, for example `us`  |
-| Parameter | `language` | Optional language code, for example `en` |
-| Header    | `apiKey`   | Optional API key override                |
-
----
-
 ### CoinDesk
 
-Retrieves the Bitcoin Price Index in real time.
-
-Example request:
+CoinDesk is currently disabled.
 
 ```json
 {
@@ -206,76 +206,148 @@ Example request:
 }
 ```
 
-Expected request values:
+## Known request keys
 
-| Type       | Required values |
-| ---------- | --------------- |
-| Parameters | None            |
-| Headers    | None            |
+### Parameter keys
 
----
+| Key        | Used by     | Description                                        |
+| ---------- | ----------- | -------------------------------------------------- |
+| `city`     | OpenWeather | City name, for example `Athens`                    |
+| `units`    | OpenWeather | Unit system, for example `metric`                  |
+| `query`    | News        | Search query                                       |
+| `country`  | News        | Country code, for example `us`                     |
+| `language` | News        | Language code, for example `en`                    |
+| `article`  | News        | Article identifier, if supported by provider logic |
+| `artistId` | Spotify     | Spotify artist identifier                          |
 
-### CatFacts
+### Header keys
 
-Retrieves a random cat fact.
-
-Example request:
-
-```json
-{
-  "clientSelection": "CatFacts",
-  "parameters": {},
-  "headers": {}
-}
-```
-
-Expected request values:
-
-| Type       | Required values |
-| ---------- | --------------- |
-| Parameters | None            |
-| Headers    | None            |
+| Key             | Used by           | Description                           |
+| --------------- | ----------------- | ------------------------------------- |
+| `apiKey`        | OpenWeather, News | Optional per-request API key override |
+| `authorization` | Future providers  | Optional authorization token          |
+| `clientId`      | Spotify           | Spotify client ID                     |
+| `clientSecret`  | Spotify           | Spotify client secret                 |
 
 ## Configuration
 
-Provider configuration is read from application configuration.
+Provider settings are read from application configuration.
 
-For local development, use .NET User Secrets instead of committing real API keys.
+Non-secret configuration, such as base URLs and enabled flags, belongs in `appsettings.json`.
 
-Initialize user secrets:
+Real credentials should be stored with .NET User Secrets or environment variables.
 
-```bash
-dotnet user-secrets init --project src/ActorApi.Api/ActorApi.Api.csproj
-```
-
-Set an OpenWeather API key:
-
-```bash
-dotnet user-secrets set "Providers:OpenWeather:ApiKey" "YOUR_KEY" --project src/ActorApi.Api/ActorApi.Api.csproj
-```
-
-Example configuration shape:
+### Example `appsettings.json`
 
 ```json
 {
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
   "Providers": {
     "OpenWeather": {
-      "ApiKey": ""
+      "BaseUrl": "http://api.openweathermap.org"
+    },
+    "CoinDesk": {
+      "Enabled": false,
+      "BaseUrl": "https://api.coindesk.com"
+    },
+    "CatFacts": {
+      "BaseUrl": "https://catfact.ninja"
     },
     "Spotify": {
-      "Enabled": false
+      "Enabled": false,
+      "BaseUrl": "https://api.spotify.com",
+      "AuthBaseUrl": "https://accounts.spotify.com"
     },
     "News": {
       "Enabled": false,
-      "ApiKey": ""
+      "BaseUrl": "https://newsapi.org"
     }
   }
 }
 ```
 
-Do not commit real API keys.
+## Validation
 
-## Running the project
+Requests are validated manually in `ActorController` using FluentValidation.
+
+Current validation rules:
+
+| Rule               | Description                                      |
+| ------------------ | ------------------------------------------------ |
+| `ClientSelection`  | Must be a valid enum value                       |
+| `Parameters`       | Cannot be null                                   |
+| `Headers`          | Cannot be null                                   |
+| OpenWeather `city` | Required when `clientSelection` is `OpenWeather` |
+
+Invalid requests return a validation ProblemDetails response.
+
+Example invalid OpenWeather request:
+
+```json
+{
+  "clientSelection": "OpenWeather",
+  "parameters": {},
+  "headers": {}
+}
+```
+
+Expected result:
+
+```text
+400 Bad Request
+```
+
+with a validation error explaining that OpenWeather requires the `city` parameter.
+
+## Error handling
+
+The API uses centralized exception handling.
+
+Custom exceptions derive from `ActorApiException` and are converted into ProblemDetails responses.
+
+Current custom exceptions:
+
+| Exception                        | Purpose                                                                  |
+| -------------------------------- | ------------------------------------------------------------------------ |
+| `ProviderDisabledException`      | Returned when a known provider is temporarily disabled                   |
+| `ProviderNotSupportedException`  | Returned when no registered provider client exists                       |
+| `ProviderUnavailableException`   | Returned when an external provider fails or is unavailable               |
+| `ProviderConfigurationException` | Returned when provider configuration or required credentials are missing |
+
+Example disabled-provider response:
+
+```json
+{
+  "title": "Provider disabled",
+  "status": 400,
+  "detail": "Spotify provider is currently disabled because it requires authentication refactoring.",
+  "instance": "/Actor/Data",
+  "traceId": "..."
+}
+```
+
+## Caching
+
+Some provider clients use in-memory caching through `IMemoryCache`.
+
+Cache keys are generated through `CacheKeyExtensions`.
+
+Examples:
+
+```text
+CatFacts:2026-06-03
+OpenWeather:athens:metric
+```
+
+Caching is used only where it makes sense for the current provider behavior.
+
+## Running locally
 
 Restore packages:
 
@@ -283,7 +355,7 @@ Restore packages:
 dotnet restore ActorApi.sln
 ```
 
-Build the solution:
+Build:
 
 ```bash
 dotnet build ActorApi.sln
@@ -307,50 +379,42 @@ Open Swagger:
 dotnet test ActorApi.sln
 ```
 
-The current tests cover:
+The test suite currently covers:
 
 * `ActorService` delegation to the resolved provider client
 * `ActorProviderClientResolver` provider selection
-* Disabled Spotify behavior
-* Disabled News behavior
+* Disabled provider behavior
 * Unsupported provider behavior
+* Request validation rules
+* Cache key generation
 
-## Current modernization status
+## Planned clients
 
-Completed modernization work includes:
+| Client                   | Status                       | Notes                                                            |
+| ------------------------ | ---------------------------- | ---------------------------------------------------------------- |
+| Open-Meteo               | Planned                      | Weather provider without API key requirement                     |
+| GitHub                   | Planned                      | Repository/user data provider                                    |
+| OMDb / movie data        | Planned                      | Replacement path for the original IMDb idea                      |
+| Public health statistics | Planned                      | Broader replacement path for the original Covid-19 database idea |
+| Spotify                  | Planned refactor             | Authentication flow needs cleanup                                |
+| News                     | Planned replacement/refactor | Current integration is unreliable                                |
 
-* Renamed and reorganized the solution structure
-* Moved source code under `src/`
-* Moved tests under `tests/`
-* Updated namespaces
-* Upgraded the project to .NET 10
-* Replaced keyed provider injection in the service with a provider resolver
-* Replaced unclear request fields with dictionary-based `parameters` and `headers`
-* Added Swagger/XML documentation
-* Added unit tests for service and resolver behavior
-* Temporarily disabled providers that require further refactoring
+## Deferred original client ideas
 
-## Planned technical improvements
+These clients were part of the original idea but are not planned for the next implementation stage.
 
-* Move provider configuration into typed options
-* Add centralized exception handling middleware
-* Add request validation
-* Improve Swagger examples
-* Replace generic dictionary requests with provider-specific request contracts later
-* Add integration tests
-* Add GitHub Actions CI
-* Add structured logging
-* Add health checks
+| Client            | Reason deferred                                             |
+| ----------------- | ----------------------------------------------------------- |
+| Google Translate  | Cloud setup and cost complexity                             |
+| Twitter / X       | API cost and authentication complexity                      |
+| IMDb              | Will likely be represented through OMDb instead             |
+| Covid-19 Database | Will likely become broader public-health statistics instead |
 
-## To-do clients
+## Development notes
 
-The original planned future clients were:
-
-| Client            | Planned purpose                      |
-| ----------------- | ------------------------------------ |
-| Google Translate  | Translation provider                 |
-| GitHub            | GitHub repository/user data provider |
-| Twitter / X       | Social media data provider           |
-| Covid-19 Database | Covid-19 statistics/data provider    |
-| IMDb              | Movie/TV data provider               |
-
+* Keep real credentials out of source control.
+* Prefer User Secrets for local development credentials.
+* Keep provider-specific behavior inside provider clients.
+* Keep request routing inside `ActorProviderClientResolver`.
+* Keep validation rules inside validators.
+* Keep HTTP error translation inside centralized exception handling.
