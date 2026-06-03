@@ -90,6 +90,69 @@ public sealed class DataActorRequestValidatorTests
     }
 
     [Fact]
+    public async Task ValidateAsync_WhenSpotifyArtistIdIsProvided_ReturnsValid()
+    {
+        // Arrange
+        var request = new DataActorRequest
+        {
+            ClientSelection = ClientSelection.Spotify,
+            Parameters =
+            {
+                [RequestParameterKeys.ArtistId] = "4Z8W4fKeB5YxbusRsdQVPb"
+            },
+            Headers = []
+        };
+
+        // Act
+        var result = await _validator.ValidateAsync(request);
+
+        // Assert
+        Assert.True(result.IsValid);
+    }
+
+    [Fact]
+    public async Task ValidateAsync_WhenSpotifyArtistIdKeyUsesDifferentCasing_ReturnsValid()
+    {
+        // Arrange
+        var request = new DataActorRequest
+        {
+            ClientSelection = ClientSelection.Spotify,
+            Parameters =
+            {
+                ["ArtistId"] = "4Z8W4fKeB5YxbusRsdQVPb"
+            },
+            Headers = []
+        };
+
+        // Act
+        var result = await _validator.ValidateAsync(request);
+
+        // Assert
+        Assert.True(result.IsValid);
+    }
+
+    [Fact]
+    public async Task ValidateAsync_WhenSpotifyArtistIdIsMissing_ReturnsInvalid()
+    {
+        // Arrange
+        var request = new DataActorRequest
+        {
+            ClientSelection = ClientSelection.Spotify,
+            Parameters = [],
+            Headers = []
+        };
+
+        // Act
+        var result = await _validator.ValidateAsync(request);
+
+        // Assert
+        Assert.False(result.IsValid);
+        Assert.Contains(
+            result.Errors,
+            error => error.ErrorMessage == "Spotify requires parameter 'ArtistId'.");
+    }
+
+    [Fact]
     public async Task ValidateAsync_WhenParametersIsNull_ReturnsInvalid()
     {
         // Arrange
