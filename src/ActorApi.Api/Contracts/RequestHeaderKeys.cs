@@ -8,11 +8,11 @@
         /// <summary>
         /// Optional per-request API key override for providers that require a key.
         /// </summary>
-        public const string ApiKey = "ApiKey";
+        public const string ApiKey = "apiKey";
         /// <summary>
         /// ClientID for Spotify Auth.
         /// </summary>
-        public const string ClientID = "ClientID";
+        public const string ClientID = "clientID";
         /// <summary>
         /// ClientSecret for Spotify Auth.
         /// </summary>

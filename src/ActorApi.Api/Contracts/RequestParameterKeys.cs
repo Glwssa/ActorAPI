@@ -32,10 +32,10 @@
         /// <summary>
         /// Article code used by News provider. Example: "".
         /// </summary>
-        public const string Article = "Article";
+        public const string Article = "article";
         /// <summary>
         /// Search query used by providers such as News or Spotify.
         /// </summary>
-        public const string ArtistId = "ArtistId";
+        public const string ArtistId = "artistId";
     }
 }

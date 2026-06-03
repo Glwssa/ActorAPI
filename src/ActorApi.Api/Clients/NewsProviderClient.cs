@@ -1,5 +1,6 @@
 ﻿using ActorApi.Api.Contracts;
 using ActorApi.Api.Domains;
+using ActorApi.Api.Exceptions;
 using ActorApi.Api.Extensions;
 using ActorApi.Api.Options;
 using Microsoft.Extensions.Caching.Memory;
@@ -13,6 +14,7 @@ namespace ActorApi.Api.Clients
 
         /// <summary>
         /// Retrives News data from a specific keyword that was published today.
+        /// NOTE: This Client is depricated and does not work.
         /// </summary>
         /// <param name="request">Request Parameters (Param1 = Article Keyword, Header1 = ApiKey)</param>
         /// <param name="cancellationToken"></param>
@@ -21,55 +23,55 @@ namespace ActorApi.Api.Clients
         /// <exception cref="HttpIOException"></exception>
         public async Task<DataActorResponse> GetDataAsync(DataActorRequest request, CancellationToken cancellationToken = default)
         {
-            //Valid fields check
-            var article = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.Article);
+            var query = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.Query);
+
+            var country = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.Country);
+
+            var language = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.Language);
+
             var apiKeyFromRequest = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ApiKey);
+
             var apiKeyFromConfiguration = _options.Value.ApiKey;
 
             var apiKey = !string.IsNullOrWhiteSpace(apiKeyFromRequest)
                 ? apiKeyFromRequest
                 : apiKeyFromConfiguration;
 
-            if (article is null )
-                throw new BadHttpRequestException("Error: Please provide all the required fields.", 400);
-
             if (string.IsNullOrWhiteSpace(apiKey))
             {
-                throw new BadHttpRequestException(
-                    "NewsProvider requires an API key. Provide it through user-secrets, environment variables, or the request headers dictionary using key 'apiKey'.",
-                    400);
+                throw new ProviderConfigurationException(
+                    ClientSelection.News,
+                    "News requires an API key. Provide it through user-secrets, environment variables, or the request headers dictionary using key 'apiKey'.");
             }
 
             DateTime dateToday = DateTime.Now;
-            string url = $"/v2/everything?q={article}&from={dateToday.ToString("yyyy-MM-dd")}&sortBy=publishedAt&apiKey={apiKey}";
+            string requestUri = $"/v2/everything?q={query}&from={dateToday.ToString("yyyy-MM-dd")}&sortBy=publishedAt&apiKey={apiKey}";
 
             //caching check
-            if (_memoryCache.TryGetValue($"News {url}", out DataActorResponse? result) && result is not null)
+            if (_memoryCache.TryGetValue($"News {requestUri}", out DataActorResponse? result) && result is not null)
             {
                 return result;
             }
 
-            //Setup Http Request with specific day
             var client = _httpClientFactory.CreateClient("NewsClient");
-            var Request = new HttpRequestMessage(new HttpMethod("GET"), url);
-            var response = await client.SendAsync(Request, cancellationToken);
+            var response = await client.GetAsync(requestUri, cancellationToken);
 
-            //Success response check
             if (!response.IsSuccessStatusCode)
-                throw new HttpIOException(HttpRequestError.ConnectionError, "Error: News Service was not available.");
-            var stringResult = await response.Content.ReadAsStringAsync(cancellationToken);
-
-            //return retrived data in generic format and add it to cache
-            var cachedResult = new DataActorResponse()
             {
-                ApiName = "News",
-                Url = client.BaseAddress + url,
+                throw new ProviderUnavailableException(
+                    ClientSelection.News,
+                    $"Received status code {(int)response.StatusCode}.");
+            }
+
+            var stringResult = await response.Content.ReadAsStringAsync(
+                cancellationToken);
+
+            return new DataActorResponse
+            {
+                ApiName = ProviderNames.News,
+                Url = client.BaseAddress + requestUri,
                 Body = stringResult
-
             };
-            _memoryCache.Set($"News {url}", cachedResult);
-
-            return cachedResult;
         }
     }
 }

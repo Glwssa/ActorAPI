@@ -1,12 +1,15 @@
 ﻿using ActorApi.Api.Contracts;
 using ActorApi.Api.Domains;
+using ActorApi.Api.Exceptions;
+using ActorApi.Api.Extensions;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace ActorApi.Api.Clients
 {
-    public class CatFactsProviderClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IActorProviderClient
+    public sealed class CatFactsProviderClient(IHttpClientFactory _httpClientFactory, IMemoryCache _memoryCache) : IActorProviderClient
     {
         public ClientSelection ClientSelection => ClientSelection.CatFacts;
+        private const string RequestUri = "/fact";
 
         /// <summary>
         /// Retrives random cat facts
@@ -17,32 +20,42 @@ namespace ActorApi.Api.Clients
         /// <exception cref="HttpIOException"></exception>
         public async Task<DataActorResponse> GetDataAsync(DataActorRequest request, CancellationToken cancellationToken = default)
         {
-            //Caching check
-            if (_memoryCache.TryGetValue($"CatFacts {DateTime.Now.ToString("yyyyy-MM-dd")}", out DataActorResponse? result) && result is not null)
+            var cacheKey = CacheKeyExtensions.CreateDailyProviderCacheKey(ProviderNames.CatFacts,DateOnly.FromDateTime(DateTime.UtcNow));
+
+            if (_memoryCache.TryGetValue(cacheKey, out DataActorResponse? cachedResult) && cachedResult is not null)
             {
-                return result;
+                return cachedResult;
             }
 
-            //Setup HttpRequest
-            var client = _httpClientFactory.CreateClient("CatFacts");
-            string url = $"/fact";
-            var response = await client.GetAsync(url, cancellationToken);
-            //Success response check
+            var client = _httpClientFactory.CreateClient(ProviderNames.CatFacts);
+
+            var response = await client.GetAsync(
+                RequestUri,
+                cancellationToken);
+
             if (!response.IsSuccessStatusCode)
-                throw new HttpIOException(HttpRequestError.ConnectionError, "Error: CatFacts Service was not available.");
-
-            var stringResult = await response.Content.ReadAsStringAsync(cancellationToken);
-
-            //return retrived data in generic format and add it to the cache
-            var cachedResult = new DataActorResponse()
             {
-                ApiName = "CatFacts",
-                Url = client.BaseAddress + url,
-                Body = stringResult
+                throw new ProviderUnavailableException(
+                    ClientSelection.CatFacts,
+                    $"Received status code {(int)response.StatusCode}.");
+            }
 
+            var stringResult = await response.Content.ReadAsStringAsync(
+                cancellationToken);
+
+            var result = new DataActorResponse
+            {
+                ApiName = ProviderNames.CatFacts,
+                Url = client.BaseAddress + RequestUri,
+                Body = stringResult
             };
-            _memoryCache.Set($"CatFacts {DateTime.Now.ToString("yyyyy-MM-dd")}", cachedResult);
-            return cachedResult;
+
+            _memoryCache.Set(
+                cacheKey,
+                result,
+                TimeSpan.FromHours(12));
+
+            return result;
         }
     }
 }

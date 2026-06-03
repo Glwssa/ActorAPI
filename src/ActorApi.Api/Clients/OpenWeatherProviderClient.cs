@@ -1,7 +1,9 @@
 ﻿using ActorApi.Api.Contracts;
 using ActorApi.Api.Domains;
+using ActorApi.Api.Exceptions;
 using ActorApi.Api.Extensions;
 using ActorApi.Api.Options;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
@@ -21,52 +23,71 @@ namespace ActorApi.Api.Clients
         /// <exception cref="HttpIOException"></exception>
         public async Task<DataActorResponse> GetDataAsync(DataActorRequest request, CancellationToken cancellationToken = default)
         {
-            //Valid fields check
             var city = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.City);
+
+            if (string.IsNullOrWhiteSpace(city))
+            {
+                throw new ProviderConfigurationException(
+                    ClientSelection.OpenWeather,
+                    "OpenWeather requires parameter 'city'.");
+            }
+
+            var units = request.Parameters.GetValueOrDefaultIgnoreCase(RequestParameterKeys.Units) ?? "metric";
+
             var apiKeyFromRequest = request.Headers.GetValueOrDefaultIgnoreCase(RequestHeaderKeys.ApiKey);
+
             var apiKeyFromConfiguration = _options.Value.ApiKey;
 
             var apiKey = !string.IsNullOrWhiteSpace(apiKeyFromRequest)
                 ? apiKeyFromRequest
                 : apiKeyFromConfiguration;
 
-            if (city is null )
-                throw new BadHttpRequestException("Error: Please provide all the required fields.", 400);
-
             if (string.IsNullOrWhiteSpace(apiKey))
             {
-                throw new BadHttpRequestException(
-                    "OpenWeather requires an API key. Provide it through user-secrets, environment variables, or the request headers dictionary using key 'apiKey'.",
-                    400);
+                throw new ProviderConfigurationException(
+                    ClientSelection.OpenWeather,
+                    "OpenWeather requires an API key. Provide it through user-secrets, environment variables, or the request headers dictionary using key 'apiKey'.");
             }
 
-            //caching check
-            string url = $"/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
-            if (_memoryCache.TryGetValue($"OpenWeather {url}", out DataActorResponse? result) && result is not null)
+            var requestUri = QueryHelpers.AddQueryString("/data/2.5/weather",
+                new Dictionary<string, string?>
+                {
+                    ["q"] = city,
+                    ["appid"] = apiKey,
+                    ["units"] = units
+                });
+
+            var cacheKey = CacheKeyExtensions.CreateProviderCacheKey(ProviderNames.OpenWeather, requestUri);
+
+            if (_memoryCache.TryGetValue(cacheKey, out DataActorResponse? cachedResult)
+                && cachedResult is not null)
             {
-                return result;
+                return cachedResult;
             }
 
-            //Setup HttpRequest
             var client = _httpClientFactory.CreateClient("OpenWeatherClient");
-            var response = await client.GetAsync(url, cancellationToken);
-            //Success response check
+
+            var response = await client.GetAsync(requestUri, cancellationToken);
+
             if (!response.IsSuccessStatusCode)
-                throw new HttpIOException(HttpRequestError.ConnectionError, "Error: OpenWeather Service was not available.");
+            {
+                throw new ProviderUnavailableException(
+                    ClientSelection.OpenWeather,
+                    $"Received status code {(int)response.StatusCode}.");
+            }
 
             var stringResult = await response.Content.ReadAsStringAsync(cancellationToken);
 
-            //return retrived data in generic format and cache it
-            var cachedResult = new DataActorResponse()
+            var result = new DataActorResponse
             {
-                ApiName = "OpenWeather",
-                Url = client.BaseAddress + url,
+                ApiName = ProviderNames.OpenWeather,
+                Url = client.BaseAddress + requestUri,
                 Body = stringResult
-
             };
-            _memoryCache.Set($"OpenWeather {url}", cachedResult);
 
-            return cachedResult;
+            _memoryCache.Set(cacheKey, result, TimeSpan.FromMinutes(10));
+
+            return result;
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using ActorApi.Api.Contracts;
 using ActorApi.Api.Domains;
+using ActorApi.Api.Exceptions;
+using ActorApi.Api.Extensions;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace ActorApi.Api.Clients
@@ -27,22 +29,31 @@ namespace ActorApi.Api.Clients
             var client = _httpClientFactory.CreateClient("CoinDesk");
             string url = $"/v1/bpi/currentprice.json";
             var response = await client.GetAsync(url, cancellationToken);
+
             //Success response check
             if (!response.IsSuccessStatusCode)
-                throw new HttpIOException(HttpRequestError.ConnectionError, "Error: CoinDesk Service was not available.");
+            {
+                throw new ProviderUnavailableException(
+                    ClientSelection.CoinDesk,
+                    $"Received status code {(int)response.StatusCode}.");
+            }
 
             var stringResult = await response.Content.ReadAsStringAsync(cancellationToken);
 
             //return retrived data in generic format and cache result
             var cachedResult = new DataActorResponse()
             {
-                ApiName = "CoinDesk",
+                ApiName = ProviderNames.CoinDesk,
                 Url = client.BaseAddress + url,
                 Body = stringResult
 
             };
 
-            _memoryCache.Set($"CoinDesk {DateTime.Now.ToString("yyyyy-MM-dd")}", cachedResult);
+            var cacheKey = CacheKeyExtensions.CreateDailyProviderCacheKey(
+                ProviderNames.CoinDesk,
+                DateOnly.FromDateTime(DateTime.UtcNow));
+
+            _memoryCache.Set(cacheKey, result, TimeSpan.FromMinutes(12));
             return cachedResult;
         }
     }
