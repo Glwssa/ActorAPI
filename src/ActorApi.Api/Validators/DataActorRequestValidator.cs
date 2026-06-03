@@ -35,5 +35,19 @@ public sealed class DataActorRequestValidator : AbstractValidator<DataActorReque
                     })
                     .WithMessage("OpenWeather requires parameter 'city'.");
             });
+        When(
+            request => request.ClientSelection == ClientSelection.Spotify,
+            () =>
+            {
+                RuleFor(request => request.Parameters)
+                    .Must(parameters =>
+                    {
+                        var artistId = parameters?.GetValueOrDefaultIgnoreCase(
+                            RequestParameterKeys.ArtistId);
+
+                        return !string.IsNullOrWhiteSpace(artistId);
+                    })
+                    .WithMessage("Spotify requires parameter 'ArtistId'.");
+            });
     }
 }
